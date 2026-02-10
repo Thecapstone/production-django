@@ -6,6 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from cookiecutter_django.utils.enums import CommentReportReason, ModeratorRoles
 from cookiecutter_django.utils.models import UIDTimeBasedModel
 
 from .managers import UserManager
@@ -40,25 +41,56 @@ class User(AbstractUser):
         return reverse("users:detail", kwargs={"pk": self.id})
     
 class ModeratorPermission(UIDTimeBasedModel):
-    
+    role = models.CharField(_("Tag of Permission"), choices=ModeratorRoles.choices, blank=False, max_length=255, unique=True)
     name = models.CharField(_("Name of Permission"), blank=False, max_length=255)
+    emoji = models.CharField(_("Emoji for Permission"), blank=True, max_length=10)
 
     def __str__(self) -> str:
         return self.name
 
 class Moderator(UIDTimeBasedModel):
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="moderator_user")
-    permissions = models.ManyToManyField("user.ModeratorPermission", related_name="moderator_permissions")
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="moderator_user")
+    permissions = models.ManyToManyField("users.ModeratorPermission", related_name="moderator_permissions")
 
 class Community(UIDTimeBasedModel):
     name = models.CharField(_("Name of Community"), blank=False, max_length=255)
-    admin = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="admin")
-    moderators = models.ManyToManyField("user.User", related_name="moderators", blank=True)
-    members = models.ManyToManyField("user.User", related_name="members", blank=True)
-    """
-    One to Many/ForeignKey: One instance only
-    Many to Many: Multiple instances
-    """
+    admin = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="admin")
+    sub_admins = models.ManyToManyField("users.User", related_name="sub_admins", blank=True)
+    moderators = models.ManyToManyField("users.User", related_name="moderators", blank=True)
+    members = models.ManyToManyField("users.User", related_name="members", blank=True)
+    description = models.TextField(_("Description of Community"), blank=True)
+    rules = models.TextField(_("Rules of Community"), blank=True)
+    emoji = models.CharField(_("Emoji for Community"), blank=True, max_length=10)
 
     def __str__(self) -> str:
         return self.name
+
+    def about(self) -> str:
+        return f"""{self.name} is a community managed by {self.admin.name}.
+        It has {self.moderators.count()} moderators and {self.members.count()} members.
+        Description: {self.description}
+        Rules: {self.rules}
+        """
+
+class ReportComment(UIDTimeBasedModel):
+    reporter = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="reporter")
+    reported_user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="reported_user")
+    reason_tag = models.CharField(_("Tag of Report"), choices=CommentReportReason.choices, blank=False, max_length=255)
+    reason = models.TextField(_("Reason for Report"), blank=False)
+    community = models.ForeignKey("users.Community", on_delete=models.CASCADE, related_name="report_community", null=True, blank=True)
+
+    # Generic content point to the post
+    content_type = models.ForeignKey("contenttypes.ContentType", on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.CharField(max_length=255, blank=True)
+
+    def __str__(self) -> str:
+        return f"Report by {self.reporter.name} against {self.reported_user.name} for reason: {self.reason}"
+
+class ReportCommunity(UIDTimeBasedModel):
+    reporter = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="community_reporter")
+    community = models.ForeignKey("users.Community", on_delete=models.CASCADE, related_name="reported_community")
+    reason_tag = models.CharField(_("Tag of Report"), choices=CommentReportReason.choices, blank=False, max_length=255)
+
+    def __str__(self) -> str:
+        return f"Comment by {self.commenter.name} on report: {self.comment}"
+

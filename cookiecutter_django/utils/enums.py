@@ -3,47 +3,20 @@ from typing import TypedDict
 from django.db.models import TextChoices
 
 
-class SubscriptionType(TextChoices):
-    MONTHLY = ("MONTHLY", "Monthly")
-    YEARLY = ("YEARLY", "Yearly")
+class ModeratorRoles(TextChoices):
+    SUPER = ("super", "super")
+    COMPLIANCE = ("compliance", "compliance")
+    CONTENT = ("content", "content")
+    COMMUNITY = ("community", "community")
+    REPORTS = ("reports", "reports")
 
 
-class UserTypes(TextChoices):
-    CONSUMER = ("CONSUMER", "CONSUMER")
-    DISCO = ("DISCO", "DISCO")
-    STAFF = ("STAFF", "STAFF")
+class CommentReportReason(TextChoices):
+    SPAMMING = ("spamming", "spamming")
+    HARM_TO_SELF_OR_OTHERS = ("harm_to_self_or_others", "harm_to_self_or_others")
+    HARASSMENT = ("harassment", "harassment")
+    INAPPROPRIATE_CONTENT = ("inappropriate_content", "inappropriate_content")
+    OTHER = ("other", "other")
 
-
-class NotificationType(TextChoices):
-    ALERT = ("ALERT", "ALERT")
-    INFO = ("INFO", "INFO")
-    WARNING = ("WARNING", "WARNING")
-    SUCCESS = ("SUCCESS", "SUCCESS")
-
-
-class NotificationSubType(TextChoices):
-    FAULT = ("FAULT", "FAULT")
-    LOW_CREDIT = ("LOW_CREDIT", "Low Credit")
-    OTHERS = ("OTHERS", "OTHERS")
-
-
-class NotificationActionSchema(TypedDict):
-    title: str
-    uri: str
-
-
-class NotificationData(TypedDict):
-    title: str
-    message: str
-
-
-class PaymentStatus(TextChoices):
-    SUCCESS = ("successful", "successful")
-    FAILED = ("failed", "failed")
-    CANCELLED = ("cancel", "cancel")
-
-
-class PaymentEvent(TextChoices):
-    CHARGE_SUCCESS = ("charge.completed", "charge.completed")
-    FAILED = ("failed", "failed")
-    CANCELLED = ("subscription.cancelled", "subscription.cancelled")
+class CommunityReportReason(TextChoices):
+    
