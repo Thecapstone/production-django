@@ -19,4 +19,4 @@ class CommentReportReason(TextChoices):
     OTHER = ("other", "other")
 
 class CommunityReportReason(TextChoices):
-    
+    ...
