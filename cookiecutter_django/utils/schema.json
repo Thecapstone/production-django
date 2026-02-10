@@ -1,0 +1,2606 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Wave API",
+    "version": "1.1.0",
+    "description": "Documentation of API endpoints of Wave"
+  },
+  "paths": {
+    "/api/v1/captions/": {
+      "get": {
+        "operationId": "captions_list",
+        "description": "FIGMA: https://www.figma.com/file/bf3x9GR71vnMSLwMq725LU/OKUPOWER-FOR-DISCO(Copy)?type=design&node-id=0-1&mode=design&t=AqK0RZeYu7pZFJJH-0 \n - List all caption projects",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedListCaptionList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "captions_create",
+        "description": "Create a new caption",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "action",
+            "schema": {
+              "enum": [
+                "translate",
+                "transcribe"
+              ],
+              "type": "string",
+              "default": "translate",
+              "minLength": 1
+            },
+            "description": "* `translate` - translate\n* `transcribe` - transcribe"
+          },
+          {
+            "in": "query",
+            "name": "from_lang",
+            "schema": {
+              "enum": [
+                "af-ZA",
+                "am-ET",
+                "ar-AE",
+                "ar-BH",
+                "ar-DZ",
+                "ar-EG",
+                "ar-IL",
+                "ar-IQ",
+                "ar-JO",
+                "ar-KW",
+                "ar-LB",
+                "ar-LY",
+                "ar-MA",
+                "ar-OM",
+                "ar-PS",
+                "ar-QA",
+                "ar-SA",
+                "ar-SY",
+                "ar-TN",
+                "ar-YE",
+                "az-AZ",
+                "bg-BG",
+                "bn-IN",
+                "bs-BA",
+                "ca-ES",
+                "cs-CZ",
+                "cy-GB",
+                "da-DK",
+                "de-AT",
+                "de-CH",
+                "de-DE",
+                "el-GR",
+                "en-AU",
+                "en-CA",
+                "en-GB",
+                "en-GH",
+                "en-HK",
+                "en-IE",
+                "en-IN",
+                "en-KE",
+                "en-NG",
+                "en-NZ",
+                "en-PH",
+                "en-SG",
+                "en-TZ",
+                "en-US",
+                "en-ZA",
+                "es-AR",
+                "es-BO",
+                "es-CL",
+                "es-CO",
+                "es-CR",
+                "es-CU",
+                "es-DO",
+                "es-EC",
+                "es-ES",
+                "es-GQ",
+                "es-GT",
+                "es-HN",
+                "es-MX",
+                "es-NI",
+                "es-PA",
+                "es-PE",
+                "es-PR",
+                "es-PY",
+                "es-SV",
+                "es-US",
+                "es-UY",
+                "es-VE",
+                "et-EE",
+                "eu-ES",
+                "fa-IR",
+                "fi-FI",
+                "fil-PH",
+                "fr-BE",
+                "fr-CA",
+                "fr-CH",
+                "fr-FR",
+                "ga-IE",
+                "gl-ES",
+                "gu-IN",
+                "he-IL",
+                "hi-IN",
+                "hr-HR",
+                "hu-HU",
+                "hy-AM",
+                "id-ID",
+                "is-IS",
+                "it-CH",
+                "it-IT",
+                "ja-JP",
+                "jv-ID",
+                "ka-GE",
+                "kk-KZ",
+                "km-KH",
+                "kn-IN",
+                "ko-KR",
+                "lo-LA",
+                "lt-LT",
+                "lv-LV",
+                "mk-MK",
+                "ml-IN",
+                "mn-MN",
+                "mr-IN",
+                "ms-MY",
+                "mt-MT",
+                "my-MM",
+                "nb-NO",
+                "ne-NP",
+                "nl-BE",
+                "nl-NL",
+                "pa-IN",
+                "pl-PL",
+                "ps-AF",
+                "pt-BR",
+                "pt-PT",
+                "ro-RO",
+                "ru-RU",
+                "si-LK",
+                "sk-SK",
+                "sl-SI",
+                "so-SO",
+                "sq-AL",
+                "sr-RS",
+                "sv-SE",
+                "sw-KE",
+                "sw-TZ",
+                "ta-IN",
+                "te-IN",
+                "th-TH",
+                "tr-TR",
+                "uk-UA",
+                "ur-IN",
+                "uz-UZ",
+                "vi-VN",
+                "wuu-CN",
+                "yue-CN",
+                "zh-CN",
+                "zh-CN-shandong",
+                "zh-CN-sichuan",
+                "zh-HK",
+                "zh-TW",
+                "zu-ZA",
+                "ot"
+              ],
+              "type": "string",
+              "default": "ot",
+              "minLength": 1
+            },
+            "description": "* `af-ZA` - Afrikaans (South Africa)\n* `am-ET` - Amharic (Ethiopia)\n* `ar-AE` - Arabic (United Arab Emirates)\n* `ar-BH` - Arabic (Bahrain)\n* `ar-DZ` - Arabic (Algeria)\n* `ar-EG` - Arabic (Egypt)\n* `ar-IL` - Arabic (Israel)\n* `ar-IQ` - Arabic (Iraq)\n* `ar-JO` - Arabic (Jordan)\n* `ar-KW` - Arabic (Kuwait)\n* `ar-LB` - Arabic (Lebanon)\n* `ar-LY` - Arabic (Libya)\n* `ar-MA` - Arabic (Morocco)\n* `ar-OM` - Arabic (Oman)\n* `ar-PS` - Arabic (Palestinian Authority)\n* `ar-QA` - Arabic (Qatar)\n* `ar-SA` - Arabic (Saudi Arabia)\n* `ar-SY` - Arabic (Syria)\n* `ar-TN` - Arabic (Tunisia)\n* `ar-YE` - Arabic (Yemen)\n* `az-AZ` - Azerbaijani (Latin, Azerbaijan)\n* `bg-BG` - Bulgarian (Bulgaria)\n* `bn-IN` - Bengali (India)\n* `bs-BA` - Bosnian (Bosnia and Herzegovina)\n* `ca-ES` - Catalan\n* `cs-CZ` - Czech (Czechia)\n* `cy-GB` - Welsh (United Kingdom)\n* `da-DK` - Danish (Denmark)\n* `de-AT` - German (Austria)\n* `de-CH` - German (Switzerland)\n* `de-DE` - German (Germany)\n* `el-GR` - Greek (Greece)\n* `en-AU` - English (Australia)\n* `en-CA` - English (Canada)\n* `en-GB` - English (United Kingdom)\n* `en-GH` - English (Ghana)\n* `en-HK` - English (Hong Kong SAR)\n* `en-IE` - English (Ireland)\n* `en-IN` - English (India)\n* `en-KE` - English (Kenya)\n* `en-NG` - English (Nigeria)\n* `en-NZ` - English (New Zealand)\n* `en-PH` - English (Philippines)\n* `en-SG` - English (Singapore)\n* `en-TZ` - English (Tanzania)\n* `en-US` - English (United States)\n* `en-ZA` - English (South Africa)\n* `es-AR` - Spanish (Argentina)\n* `es-BO` - Spanish (Bolivia)\n* `es-CL` - Spanish (Chile)\n* `es-CO` - Spanish (Colombia)\n* `es-CR` - Spanish (Costa Rica)\n* `es-CU` - Spanish (Cuba)\n* `es-DO` - Spanish (Dominican Republic)\n* `es-EC` - Spanish (Ecuador)\n* `es-ES` - Spanish (Spain)\n* `es-GQ` - Spanish (Equatorial Guinea)\n* `es-GT` - Spanish (Guatemala)\n* `es-HN` - Spanish (Honduras)\n* `es-MX` - Spanish (Mexico)\n* `es-NI` - Spanish (Nicaragua)\n* `es-PA` - Spanish (Panama)\n* `es-PE` - Spanish (Peru)\n* `es-PR` - Spanish (Puerto Rico)\n* `es-PY` - Spanish (Paraguay)\n* `es-SV` - Spanish (El Salvador)\n* `es-US` - Spanish (United States)\n* `es-UY` - Spanish (Uruguay)\n* `es-VE` - Spanish (Venezuela)\n* `et-EE` - Estonian (Estonia)\n* `eu-ES` - Basque\n* `fa-IR` - Persian (Iran)\n* `fi-FI` - Finnish (Finland)\n* `fil-PH` - Filipino (Philippines)\n* `fr-BE` - French (Belgium)\n* `fr-CA` - French (Canada)\n* `fr-CH` - French (Switzerland)\n* `fr-FR` - French (France)\n* `ga-IE` - Irish (Ireland)\n* `gl-ES` - Galician\n* `gu-IN` - Gujarati (India)\n* `he-IL` - Hebrew (Israel)\n* `hi-IN` - Hindi (India)\n* `hr-HR` - Croatian (Croatia)\n* `hu-HU` - Hungarian (Hungary)\n* `hy-AM` - Armenian (Armenia)\n* `id-ID` - Indonesian (Indonesia)\n* `is-IS` - Icelandic (Iceland)\n* `it-CH` - Italian (Switzerland)\n* `it-IT` - Italian (Italy)\n* `ja-JP` - Japanese (Japan)\n* `jv-ID` - Javanese (Latin, Indonesia)\n* `ka-GE` - Georgian (Georgia)\n* `kk-KZ` - Kazakh (Kazakhstan)\n* `km-KH` - Khmer (Cambodia)\n* `kn-IN` - Kannada (India)\n* `ko-KR` - Korean (Korea)\n* `lo-LA` - Lao (Laos)\n* `lt-LT` - Lithuanian (Lithuania)\n* `lv-LV` - Latvian (Latvia)\n* `mk-MK` - Macedonian (North Macedonia)\n* `ml-IN` - Malayalam (India)\n* `mn-MN` - Mongolian (Mongolia)\n* `mr-IN` - Marathi (India)\n* `ms-MY` - Malay (Malaysia)\n* `mt-MT` - Maltese (Malta)\n* `my-MM` - Burmese (Myanmar)\n* `nb-NO` - Norwegian BokmÃ¥l (Norway)\n* `ne-NP` - Nepali (Nepal)\n* `nl-BE` - Dutch (Belgium)\n* `nl-NL` - Dutch (Netherlands)\n* `pa-IN` - Punjabi (India)\n* `pl-PL` - Polish (Poland)\n* `ps-AF` - Pashto (Afghanistan)\n* `pt-BR` - Portuguese (Brazil)\n* `pt-PT` - Portuguese (Portugal)\n* `ro-RO` - Romanian (Romania)\n* `ru-RU` - Russian (Russia)\n* `si-LK` - Sinhala (Sri Lanka)\n* `sk-SK` - Slovak (Slovakia)\n* `sl-SI` - Slovenian (Slovenia)\n* `so-SO` - Somali (Somalia)\n* `sq-AL` - Albanian (Albania)\n* `sr-RS` - Serbian (Cyrillic, Serbia)\n* `sv-SE` - Swedish (Sweden)\n* `sw-KE` - Swahili (Kenya)\n* `sw-TZ` - Swahili (Tanzania)\n* `ta-IN` - Tamil (India)\n* `te-IN` - Telugu (India)\n* `th-TH` - Thai (Thailand)\n* `tr-TR` - Turkish (TÃ¼rkiye)\n* `uk-UA` - Ukrainian (Ukraine)\n* `ur-IN` - Urdu (India)\n* `uz-UZ` - Uzbek (Latin, Uzbekistan)\n* `vi-VN` - Vietnamese (Vietnam)\n* `wuu-CN` - Chinese (Wu, Simplified)\n* `yue-CN` - Chinese (Cantonese, Simplified)\n* `zh-CN` - Chinese (Mandarin, Simplified)\n* `zh-CN-shandong` - Chinese (Jilu Mandarin, Simplified)\n* `zh-CN-sichuan` - Chinese (Southwestern Mandarin, Simplified)\n* `zh-HK` - Chinese (Cantonese, Traditional)\n* `zh-TW` - Chinese (Taiwanese Mandarin, Traditional)\n* `zu-ZA` - Zulu (South Africa)\n* `ot` - Others"
+          },
+          {
+            "in": "query",
+            "name": "to_lang",
+            "schema": {
+              "enum": [
+                "af",
+                "sq",
+                "am",
+                "ar",
+                "hy",
+                "as",
+                "az",
+                "bn",
+                "bs",
+                "bg",
+                "yue",
+                "ca",
+                "lzh",
+                "zh-Hans",
+                "zh-Hant",
+                "hr",
+                "cs",
+                "da",
+                "prs",
+                "nl",
+                "en",
+                "et",
+                "fj",
+                "fil",
+                "fi",
+                "fr",
+                "fr-ca",
+                "de",
+                "el",
+                "gu",
+                "ht",
+                "he",
+                "hi",
+                "mww",
+                "hu",
+                "is",
+                "id",
+                "iu",
+                "ga",
+                "it",
+                "ja",
+                "kn",
+                "kk",
+                "km",
+                "tlh-Latn",
+                "tlh-Piqd",
+                "ko",
+                "ku",
+                "kmr",
+                "lo",
+                "lv",
+                "lt",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "my",
+                "ne",
+                "nb",
+                "or",
+                "ps",
+                "fa",
+                "pl",
+                "pt",
+                "pt-pt",
+                "pa",
+                "otq",
+                "ro",
+                "ru",
+                "sm",
+                "sr-Cyrl",
+                "sr-Latn",
+                "sk",
+                "sl",
+                "es",
+                "sw",
+                "sv",
+                "ty",
+                "ta",
+                "te",
+                "th",
+                "ti",
+                "to",
+                "tr",
+                "uk",
+                "ur",
+                "vi",
+                "cy",
+                "yua",
+                "ot"
+              ],
+              "type": "string",
+              "default": "ot",
+              "minLength": 1
+            },
+            "description": "* `af` - Afrikaans\n* `sq` - Albanian\n* `am` - Amharic\n* `ar` - Arabic\n* `hy` - Armenian\n* `as` - Assamese\n* `az` - Azerbaijani\n* `bn` - Bangla\n* `bs` - Bosnian (Latin)\n* `bg` - Bulgarian\n* `yue` - Cantonese (Traditional)\n* `ca` - Catalan\n* `lzh` - Chinese (Literary)\n* `zh-Hans` - Chinese Simplified\n* `zh-Hant` - Chinese Traditional\n* `hr` - Croatian\n* `cs` - Czech\n* `da` - Danish\n* `prs` - Dari\n* `nl` - Dutch\n* `en` - English\n* `et` - Estonian\n* `fj` - Fijian\n* `fil` - Filipino\n* `fi` - Finnish\n* `fr` - French\n* `fr-ca` - French (Canada)\n* `de` - German\n* `el` - Greek\n* `gu` - Gujarati\n* `ht` - Haitian Creole\n* `he` - Hebrew\n* `hi` - Hindi\n* `mww` - Hmong Daw\n* `hu` - Hungarian\n* `is` - Icelandic\n* `id` - Indonesian\n* `iu` - Inuktitut\n* `ga` - Irish\n* `it` - Italian\n* `ja` - Japanese\n* `kn` - Kannada\n* `kk` - Kazakh\n* `km` - Khmer\n* `tlh-Latn` - Klingon\n* `tlh-Piqd` - Klingon (plqaD)\n* `ko` - Korean\n* `ku` - Kurdish (Central)\n* `kmr` - Kurdish (Northern)\n* `lo` - Lao\n* `lv` - Latvian\n* `lt` - Lithuanian\n* `mg` - Malagasy\n* `ms` - Malay\n* `ml` - Malayalam\n* `mt` - Maltese\n* `mi` - Maori\n* `mr` - Marathi\n* `my` - Myanmar\n* `ne` - Nepali\n* `nb` - Norwegian\n* `or` - Odia\n* `ps` - Pashto\n* `fa` - Persian\n* `pl` - Polish\n* `pt` - Portuguese (Brazil)\n* `pt-pt` - Portuguese (Portugal)\n* `pa` - Punjabi\n* `otq` - Queretaro Otomi\n* `ro` - Romanian\n* `ru` - Russian\n* `sm` - Samoan\n* `sr-Cyrl` - Serbian (Cyrillic)\n* `sr-Latn` - Serbian (Latin)\n* `sk` - Slovak\n* `sl` - Slovenian\n* `es` - Spanish\n* `sw` - Swahili\n* `sv` - Swedish\n* `ty` - Tahitian\n* `ta` - Tamil\n* `te` - Telugu\n* `th` - Thai\n* `ti` - Tigrinya\n* `to` - Tongan\n* `tr` - Turkish\n* `uk` - Ukrainian\n* `ur` - Urdu\n* `vi` - Vietnamese\n* `cy` - Welsh\n* `yua` - Yucatec Maya\n* `ot` - Others"
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCaption"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCaption"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCaption"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/captions/{id}/": {
+      "get": {
+        "operationId": "captions_retrieve",
+        "description": "- Retrieve a caption project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this caption.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCaption"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "operationId": "captions_partial_update",
+        "description": "This endpoint embeds the srt file to the video",
+        "summary": "Embed captions to the video",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this caption.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedUpdateCaption"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedUpdateCaption"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCaption"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "captions_destroy",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this caption.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No response body"
+          }
+        }
+      }
+    },
+    "/api/v1/captions/from_languages/": {
+      "get": {
+        "operationId": "captions_from_languages_list",
+        "description": "List of languages to be used in from_lang parameter",
+        "summary": "List of languages to be used in from_lang parameter",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedFromLanguageResponseList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/captions/languages/": {
+      "get": {
+        "operationId": "captions_languages_list",
+        "summary": "List of languages to be used in languages parameter",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedToLanguageResponseList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/captions/rss/": {
+      "get": {
+        "operationId": "captions_rss_retrieve",
+        "description": "This endpoint would fetch rss feeds from major rss feed providers, and translate it to Arabic",
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "description": "No response body"
+          }
+        }
+      }
+    },
+    "/api/v1/captions/text/": {
+      "post": {
+        "operationId": "captions_text_create",
+        "description": "Create text to text translation",
+        "tags": [
+          "captions"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslateText"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslateText"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextTranslationResponse"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/captions/to_languages/": {
+      "get": {
+        "operationId": "captions_to_languages_list",
+        "description": "List of languages to be used in to_lang parameter",
+        "summary": "List of languages to be used in to_lang parameter",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "captions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedToLanguageResponseList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/schema/": {
+      "get": {
+        "operationId": "schema_retrieve",
+        "description": "OpenApi3 schema for this API. Format can be selected via content negotiation.\n\n- YAML: application/vnd.oai.openapi\n- JSON: application/vnd.oai.openapi+json",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "yaml"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "af",
+                "ar",
+                "ar-dz",
+                "ast",
+                "az",
+                "be",
+                "bg",
+                "bn",
+                "br",
+                "bs",
+                "ca",
+                "ckb",
+                "cs",
+                "cy",
+                "da",
+                "de",
+                "dsb",
+                "el",
+                "en",
+                "en-au",
+                "en-gb",
+                "eo",
+                "es",
+                "es-ar",
+                "es-co",
+                "es-mx",
+                "es-ni",
+                "es-ve",
+                "et",
+                "eu",
+                "fa",
+                "fi",
+                "fr",
+                "fy",
+                "ga",
+                "gd",
+                "gl",
+                "he",
+                "hi",
+                "hr",
+                "hsb",
+                "hu",
+                "hy",
+                "ia",
+                "id",
+                "ig",
+                "io",
+                "is",
+                "it",
+                "ja",
+                "ka",
+                "kab",
+                "kk",
+                "km",
+                "kn",
+                "ko",
+                "ky",
+                "lb",
+                "lt",
+                "lv",
+                "mk",
+                "ml",
+                "mn",
+                "mr",
+                "ms",
+                "my",
+                "nb",
+                "ne",
+                "nl",
+                "nn",
+                "os",
+                "pa",
+                "pl",
+                "pt",
+                "pt-br",
+                "ro",
+                "ru",
+                "sk",
+                "sl",
+                "sq",
+                "sr",
+                "sr-latn",
+                "sv",
+                "sw",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "tk",
+                "tr",
+                "tt",
+                "udm",
+                "uk",
+                "ur",
+                "uz",
+                "vi",
+                "zh-hans",
+                "zh-hant"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "schema"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.oai.openapi": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "application/yaml": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "application/vnd.oai.openapi+json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/": {
+      "get": {
+        "operationId": "subscriptions_list",
+        "description": "- List all payments made by the user",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "subscriptions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedGetSubscriptionList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "subscriptions_create",
+        "description": "- Buy a plan",
+        "summary": "Buy a plan",
+        "tags": [
+          "subscriptions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscription"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscription"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscription"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSubscription"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/{id}/": {
+      "get": {
+        "operationId": "subscriptions_retrieve",
+        "description": "- Webhook for confirming the status of a subscription",
+        "summary": "Subscription webhook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this subscriptions.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "subscriptions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FetchSubscription"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/card_type/": {
+      "get": {
+        "operationId": "subscriptions_card_type_retrieve",
+        "summary": "Get the company of the card through the card number",
+        "tags": [
+          "subscriptions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardTypeResponseSchema"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/currencies/": {
+      "get": {
+        "operationId": "subscriptions_currencies_retrieve",
+        "tags": [
+          "subscriptions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrencySchema"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/subscriptions/plans/": {
+      "get": {
+        "operationId": "subscriptions_plans_list",
+        "description": "Returns all payment plans, their prices, descriptions, etc",
+        "summary": "Get all payment plans",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "tags": [
+          "subscriptions"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedSubscriptionPlansList"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/": {
+      "get": {
+        "operationId": "users_list",
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetUser"
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}/": {
+      "get": {
+        "operationId": "users_retrieve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this user.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "operationId": "users_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this user.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUser"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUser"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "operationId": "users_partial_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "A unique value identifying this user.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedGetUser"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedGetUser"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedGetUser"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/dialing_code/": {
+      "get": {
+        "operationId": "users_dialing_code_retrieve",
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/free_mode/": {
+      "patch": {
+        "operationId": "users_free_mode_partial_update",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedGetUser"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedGetUser"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchedGetUser"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/": {
+      "get": {
+        "operationId": "users_me_retrieve",
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/users/register/": {
+      "post": {
+        "operationId": "users_register_create",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          },
+          {
+            "jwtAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUser"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CardTypeResponseSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/IconEnum"
+          },
+          "label": {
+            "$ref": "#/components/schemas/IconEnum"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/IconEnum"
+          }
+        },
+        "required": [
+          "icon",
+          "label",
+          "value"
+        ]
+      },
+      "CreateCaption": {
+        "type": "object",
+        "properties": {
+          "resource": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "resource"
+        ]
+      },
+      "CreateSubscription": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "writeOnly": true
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "plan": {
+            "$ref": "#/components/schemas/PlanEnum"
+          }
+        },
+        "required": [
+          "plan",
+          "source"
+        ]
+      },
+      "CreateUser": {
+        "type": "object",
+        "properties": {
+          "phone_no": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "phone_no"
+        ]
+      },
+      "CurrencySchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/IconEnum"
+          },
+          "label": {
+            "$ref": "#/components/schemas/IconEnum"
+          }
+        },
+        "required": [
+          "label",
+          "value"
+        ]
+      },
+      "FetchSubscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "plan": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {},
+            "readOnly": true
+          }
+        },
+        "required": [
+          "id",
+          "metadata",
+          "plan",
+          "status"
+        ]
+      },
+      "FromLanguageResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/FromLanguageResponseValueEnum"
+          },
+          "label": {
+            "$ref": "#/components/schemas/FromLanguageResponseLabelEnum"
+          }
+        },
+        "required": [
+          "label",
+          "value"
+        ]
+      },
+      "FromLanguageResponseLabelEnum": {
+        "enum": [
+          "Afrikaans (South Africa)",
+          "Amharic (Ethiopia)",
+          "Arabic (United Arab Emirates)",
+          "Arabic (Bahrain)",
+          "Arabic (Algeria)",
+          "Arabic (Egypt)",
+          "Arabic (Israel)",
+          "Arabic (Iraq)",
+          "Arabic (Jordan)",
+          "Arabic (Kuwait)",
+          "Arabic (Lebanon)",
+          "Arabic (Libya)",
+          "Arabic (Morocco)",
+          "Arabic (Oman)",
+          "Arabic (Palestinian Authority)",
+          "Arabic (Qatar)",
+          "Arabic (Saudi Arabia)",
+          "Arabic (Syria)",
+          "Arabic (Tunisia)",
+          "Arabic (Yemen)",
+          "Azerbaijani (Latin, Azerbaijan)",
+          "Bulgarian (Bulgaria)",
+          "Bengali (India)",
+          "Bosnian (Bosnia and Herzegovina)",
+          "Catalan",
+          "Czech (Czechia)",
+          "Welsh (United Kingdom)",
+          "Danish (Denmark)",
+          "German (Austria)",
+          "German (Switzerland)",
+          "German (Germany)",
+          "Greek (Greece)",
+          "English (Australia)",
+          "English (Canada)",
+          "English (United Kingdom)",
+          "English (Ghana)",
+          "English (Hong Kong SAR)",
+          "English (Ireland)",
+          "English (India)",
+          "English (Kenya)",
+          "English (Nigeria)",
+          "English (New Zealand)",
+          "English (Philippines)",
+          "English (Singapore)",
+          "English (Tanzania)",
+          "English (United States)",
+          "English (South Africa)",
+          "Spanish (Argentina)",
+          "Spanish (Bolivia)",
+          "Spanish (Chile)",
+          "Spanish (Colombia)",
+          "Spanish (Costa Rica)",
+          "Spanish (Cuba)",
+          "Spanish (Dominican Republic)",
+          "Spanish (Ecuador)",
+          "Spanish (Spain)",
+          "Spanish (Equatorial Guinea)",
+          "Spanish (Guatemala)",
+          "Spanish (Honduras)",
+          "Spanish (Mexico)",
+          "Spanish (Nicaragua)",
+          "Spanish (Panama)",
+          "Spanish (Peru)",
+          "Spanish (Puerto Rico)",
+          "Spanish (Paraguay)",
+          "Spanish (El Salvador)",
+          "Spanish (United States)",
+          "Spanish (Uruguay)",
+          "Spanish (Venezuela)",
+          "Estonian (Estonia)",
+          "Basque",
+          "Persian (Iran)",
+          "Finnish (Finland)",
+          "Filipino (Philippines)",
+          "French (Belgium)",
+          "French (Canada)",
+          "French (Switzerland)",
+          "French (France)",
+          "Irish (Ireland)",
+          "Galician",
+          "Gujarati (India)",
+          "Hebrew (Israel)",
+          "Hindi (India)",
+          "Croatian (Croatia)",
+          "Hungarian (Hungary)",
+          "Armenian (Armenia)",
+          "Indonesian (Indonesia)",
+          "Icelandic (Iceland)",
+          "Italian (Switzerland)",
+          "Italian (Italy)",
+          "Japanese (Japan)",
+          "Javanese (Latin, Indonesia)",
+          "Georgian (Georgia)",
+          "Kazakh (Kazakhstan)",
+          "Khmer (Cambodia)",
+          "Kannada (India)",
+          "Korean (Korea)",
+          "Lao (Laos)",
+          "Lithuanian (Lithuania)",
+          "Latvian (Latvia)",
+          "Macedonian (North Macedonia)",
+          "Malayalam (India)",
+          "Mongolian (Mongolia)",
+          "Marathi (India)",
+          "Malay (Malaysia)",
+          "Maltese (Malta)",
+          "Burmese (Myanmar)",
+          "Norwegian BokmÃ¥l (Norway)",
+          "Nepali (Nepal)",
+          "Dutch (Belgium)",
+          "Dutch (Netherlands)",
+          "Punjabi (India)",
+          "Polish (Poland)",
+          "Pashto (Afghanistan)",
+          "Portuguese (Brazil)",
+          "Portuguese (Portugal)",
+          "Romanian (Romania)",
+          "Russian (Russia)",
+          "Sinhala (Sri Lanka)",
+          "Slovak (Slovakia)",
+          "Slovenian (Slovenia)",
+          "Somali (Somalia)",
+          "Albanian (Albania)",
+          "Serbian (Cyrillic, Serbia)",
+          "Swedish (Sweden)",
+          "Swahili (Kenya)",
+          "Swahili (Tanzania)",
+          "Tamil (India)",
+          "Telugu (India)",
+          "Thai (Thailand)",
+          "Turkish (TÃ¼rkiye)",
+          "Ukrainian (Ukraine)",
+          "Urdu (India)",
+          "Uzbek (Latin, Uzbekistan)",
+          "Vietnamese (Vietnam)",
+          "Chinese (Wu, Simplified)",
+          "Chinese (Cantonese, Simplified)",
+          "Chinese (Mandarin, Simplified)",
+          "Chinese (Jilu Mandarin, Simplified)",
+          "Chinese (Southwestern Mandarin, Simplified)",
+          "Chinese (Cantonese, Traditional)",
+          "Chinese (Taiwanese Mandarin, Traditional)",
+          "Zulu (South Africa)",
+          "Others"
+        ],
+        "type": "string",
+        "description": "* `Afrikaans (South Africa)` - Afrikaans (South Africa)\n* `Amharic (Ethiopia)` - Amharic (Ethiopia)\n* `Arabic (United Arab Emirates)` - Arabic (United Arab Emirates)\n* `Arabic (Bahrain)` - Arabic (Bahrain)\n* `Arabic (Algeria)` - Arabic (Algeria)\n* `Arabic (Egypt)` - Arabic (Egypt)\n* `Arabic (Israel)` - Arabic (Israel)\n* `Arabic (Iraq)` - Arabic (Iraq)\n* `Arabic (Jordan)` - Arabic (Jordan)\n* `Arabic (Kuwait)` - Arabic (Kuwait)\n* `Arabic (Lebanon)` - Arabic (Lebanon)\n* `Arabic (Libya)` - Arabic (Libya)\n* `Arabic (Morocco)` - Arabic (Morocco)\n* `Arabic (Oman)` - Arabic (Oman)\n* `Arabic (Palestinian Authority)` - Arabic (Palestinian Authority)\n* `Arabic (Qatar)` - Arabic (Qatar)\n* `Arabic (Saudi Arabia)` - Arabic (Saudi Arabia)\n* `Arabic (Syria)` - Arabic (Syria)\n* `Arabic (Tunisia)` - Arabic (Tunisia)\n* `Arabic (Yemen)` - Arabic (Yemen)\n* `Azerbaijani (Latin, Azerbaijan)` - Azerbaijani (Latin, Azerbaijan)\n* `Bulgarian (Bulgaria)` - Bulgarian (Bulgaria)\n* `Bengali (India)` - Bengali (India)\n* `Bosnian (Bosnia and Herzegovina)` - Bosnian (Bosnia and Herzegovina)\n* `Catalan` - Catalan\n* `Czech (Czechia)` - Czech (Czechia)\n* `Welsh (United Kingdom)` - Welsh (United Kingdom)\n* `Danish (Denmark)` - Danish (Denmark)\n* `German (Austria)` - German (Austria)\n* `German (Switzerland)` - German (Switzerland)\n* `German (Germany)` - German (Germany)\n* `Greek (Greece)` - Greek (Greece)\n* `English (Australia)` - English (Australia)\n* `English (Canada)` - English (Canada)\n* `English (United Kingdom)` - English (United Kingdom)\n* `English (Ghana)` - English (Ghana)\n* `English (Hong Kong SAR)` - English (Hong Kong SAR)\n* `English (Ireland)` - English (Ireland)\n* `English (India)` - English (India)\n* `English (Kenya)` - English (Kenya)\n* `English (Nigeria)` - English (Nigeria)\n* `English (New Zealand)` - English (New Zealand)\n* `English (Philippines)` - English (Philippines)\n* `English (Singapore)` - English (Singapore)\n* `English (Tanzania)` - English (Tanzania)\n* `English (United States)` - English (United States)\n* `English (South Africa)` - English (South Africa)\n* `Spanish (Argentina)` - Spanish (Argentina)\n* `Spanish (Bolivia)` - Spanish (Bolivia)\n* `Spanish (Chile)` - Spanish (Chile)\n* `Spanish (Colombia)` - Spanish (Colombia)\n* `Spanish (Costa Rica)` - Spanish (Costa Rica)\n* `Spanish (Cuba)` - Spanish (Cuba)\n* `Spanish (Dominican Republic)` - Spanish (Dominican Republic)\n* `Spanish (Ecuador)` - Spanish (Ecuador)\n* `Spanish (Spain)` - Spanish (Spain)\n* `Spanish (Equatorial Guinea)` - Spanish (Equatorial Guinea)\n* `Spanish (Guatemala)` - Spanish (Guatemala)\n* `Spanish (Honduras)` - Spanish (Honduras)\n* `Spanish (Mexico)` - Spanish (Mexico)\n* `Spanish (Nicaragua)` - Spanish (Nicaragua)\n* `Spanish (Panama)` - Spanish (Panama)\n* `Spanish (Peru)` - Spanish (Peru)\n* `Spanish (Puerto Rico)` - Spanish (Puerto Rico)\n* `Spanish (Paraguay)` - Spanish (Paraguay)\n* `Spanish (El Salvador)` - Spanish (El Salvador)\n* `Spanish (United States)` - Spanish (United States)\n* `Spanish (Uruguay)` - Spanish (Uruguay)\n* `Spanish (Venezuela)` - Spanish (Venezuela)\n* `Estonian (Estonia)` - Estonian (Estonia)\n* `Basque` - Basque\n* `Persian (Iran)` - Persian (Iran)\n* `Finnish (Finland)` - Finnish (Finland)\n* `Filipino (Philippines)` - Filipino (Philippines)\n* `French (Belgium)` - French (Belgium)\n* `French (Canada)` - French (Canada)\n* `French (Switzerland)` - French (Switzerland)\n* `French (France)` - French (France)\n* `Irish (Ireland)` - Irish (Ireland)\n* `Galician` - Galician\n* `Gujarati (India)` - Gujarati (India)\n* `Hebrew (Israel)` - Hebrew (Israel)\n* `Hindi (India)` - Hindi (India)\n* `Croatian (Croatia)` - Croatian (Croatia)\n* `Hungarian (Hungary)` - Hungarian (Hungary)\n* `Armenian (Armenia)` - Armenian (Armenia)\n* `Indonesian (Indonesia)` - Indonesian (Indonesia)\n* `Icelandic (Iceland)` - Icelandic (Iceland)\n* `Italian (Switzerland)` - Italian (Switzerland)\n* `Italian (Italy)` - Italian (Italy)\n* `Japanese (Japan)` - Japanese (Japan)\n* `Javanese (Latin, Indonesia)` - Javanese (Latin, Indonesia)\n* `Georgian (Georgia)` - Georgian (Georgia)\n* `Kazakh (Kazakhstan)` - Kazakh (Kazakhstan)\n* `Khmer (Cambodia)` - Khmer (Cambodia)\n* `Kannada (India)` - Kannada (India)\n* `Korean (Korea)` - Korean (Korea)\n* `Lao (Laos)` - Lao (Laos)\n* `Lithuanian (Lithuania)` - Lithuanian (Lithuania)\n* `Latvian (Latvia)` - Latvian (Latvia)\n* `Macedonian (North Macedonia)` - Macedonian (North Macedonia)\n* `Malayalam (India)` - Malayalam (India)\n* `Mongolian (Mongolia)` - Mongolian (Mongolia)\n* `Marathi (India)` - Marathi (India)\n* `Malay (Malaysia)` - Malay (Malaysia)\n* `Maltese (Malta)` - Maltese (Malta)\n* `Burmese (Myanmar)` - Burmese (Myanmar)\n* `Norwegian BokmÃ¥l (Norway)` - Norwegian BokmÃ¥l (Norway)\n* `Nepali (Nepal)` - Nepali (Nepal)\n* `Dutch (Belgium)` - Dutch (Belgium)\n* `Dutch (Netherlands)` - Dutch (Netherlands)\n* `Punjabi (India)` - Punjabi (India)\n* `Polish (Poland)` - Polish (Poland)\n* `Pashto (Afghanistan)` - Pashto (Afghanistan)\n* `Portuguese (Brazil)` - Portuguese (Brazil)\n* `Portuguese (Portugal)` - Portuguese (Portugal)\n* `Romanian (Romania)` - Romanian (Romania)\n* `Russian (Russia)` - Russian (Russia)\n* `Sinhala (Sri Lanka)` - Sinhala (Sri Lanka)\n* `Slovak (Slovakia)` - Slovak (Slovakia)\n* `Slovenian (Slovenia)` - Slovenian (Slovenia)\n* `Somali (Somalia)` - Somali (Somalia)\n* `Albanian (Albania)` - Albanian (Albania)\n* `Serbian (Cyrillic, Serbia)` - Serbian (Cyrillic, Serbia)\n* `Swedish (Sweden)` - Swedish (Sweden)\n* `Swahili (Kenya)` - Swahili (Kenya)\n* `Swahili (Tanzania)` - Swahili (Tanzania)\n* `Tamil (India)` - Tamil (India)\n* `Telugu (India)` - Telugu (India)\n* `Thai (Thailand)` - Thai (Thailand)\n* `Turkish (TÃ¼rkiye)` - Turkish (TÃ¼rkiye)\n* `Ukrainian (Ukraine)` - Ukrainian (Ukraine)\n* `Urdu (India)` - Urdu (India)\n* `Uzbek (Latin, Uzbekistan)` - Uzbek (Latin, Uzbekistan)\n* `Vietnamese (Vietnam)` - Vietnamese (Vietnam)\n* `Chinese (Wu, Simplified)` - Chinese (Wu, Simplified)\n* `Chinese (Cantonese, Simplified)` - Chinese (Cantonese, Simplified)\n* `Chinese (Mandarin, Simplified)` - Chinese (Mandarin, Simplified)\n* `Chinese (Jilu Mandarin, Simplified)` - Chinese (Jilu Mandarin, Simplified)\n* `Chinese (Southwestern Mandarin, Simplified)` - Chinese (Southwestern Mandarin, Simplified)\n* `Chinese (Cantonese, Traditional)` - Chinese (Cantonese, Traditional)\n* `Chinese (Taiwanese Mandarin, Traditional)` - Chinese (Taiwanese Mandarin, Traditional)\n* `Zulu (South Africa)` - Zulu (South Africa)\n* `Others` - Others"
+      },
+      "FromLanguageResponseValueEnum": {
+        "enum": [
+          "af-ZA",
+          "am-ET",
+          "ar-AE",
+          "ar-BH",
+          "ar-DZ",
+          "ar-EG",
+          "ar-IL",
+          "ar-IQ",
+          "ar-JO",
+          "ar-KW",
+          "ar-LB",
+          "ar-LY",
+          "ar-MA",
+          "ar-OM",
+          "ar-PS",
+          "ar-QA",
+          "ar-SA",
+          "ar-SY",
+          "ar-TN",
+          "ar-YE",
+          "az-AZ",
+          "bg-BG",
+          "bn-IN",
+          "bs-BA",
+          "ca-ES",
+          "cs-CZ",
+          "cy-GB",
+          "da-DK",
+          "de-AT",
+          "de-CH",
+          "de-DE",
+          "el-GR",
+          "en-AU",
+          "en-CA",
+          "en-GB",
+          "en-GH",
+          "en-HK",
+          "en-IE",
+          "en-IN",
+          "en-KE",
+          "en-NG",
+          "en-NZ",
+          "en-PH",
+          "en-SG",
+          "en-TZ",
+          "en-US",
+          "en-ZA",
+          "es-AR",
+          "es-BO",
+          "es-CL",
+          "es-CO",
+          "es-CR",
+          "es-CU",
+          "es-DO",
+          "es-EC",
+          "es-ES",
+          "es-GQ",
+          "es-GT",
+          "es-HN",
+          "es-MX",
+          "es-NI",
+          "es-PA",
+          "es-PE",
+          "es-PR",
+          "es-PY",
+          "es-SV",
+          "es-US",
+          "es-UY",
+          "es-VE",
+          "et-EE",
+          "eu-ES",
+          "fa-IR",
+          "fi-FI",
+          "fil-PH",
+          "fr-BE",
+          "fr-CA",
+          "fr-CH",
+          "fr-FR",
+          "ga-IE",
+          "gl-ES",
+          "gu-IN",
+          "he-IL",
+          "hi-IN",
+          "hr-HR",
+          "hu-HU",
+          "hy-AM",
+          "id-ID",
+          "is-IS",
+          "it-CH",
+          "it-IT",
+          "ja-JP",
+          "jv-ID",
+          "ka-GE",
+          "kk-KZ",
+          "km-KH",
+          "kn-IN",
+          "ko-KR",
+          "lo-LA",
+          "lt-LT",
+          "lv-LV",
+          "mk-MK",
+          "ml-IN",
+          "mn-MN",
+          "mr-IN",
+          "ms-MY",
+          "mt-MT",
+          "my-MM",
+          "nb-NO",
+          "ne-NP",
+          "nl-BE",
+          "nl-NL",
+          "pa-IN",
+          "pl-PL",
+          "ps-AF",
+          "pt-BR",
+          "pt-PT",
+          "ro-RO",
+          "ru-RU",
+          "si-LK",
+          "sk-SK",
+          "sl-SI",
+          "so-SO",
+          "sq-AL",
+          "sr-RS",
+          "sv-SE",
+          "sw-KE",
+          "sw-TZ",
+          "ta-IN",
+          "te-IN",
+          "th-TH",
+          "tr-TR",
+          "uk-UA",
+          "ur-IN",
+          "uz-UZ",
+          "vi-VN",
+          "wuu-CN",
+          "yue-CN",
+          "zh-CN",
+          "zh-CN-shandong",
+          "zh-CN-sichuan",
+          "zh-HK",
+          "zh-TW",
+          "zu-ZA",
+          "ot"
+        ],
+        "type": "string",
+        "description": "* `af-ZA` - af-ZA\n* `am-ET` - am-ET\n* `ar-AE` - ar-AE\n* `ar-BH` - ar-BH\n* `ar-DZ` - ar-DZ\n* `ar-EG` - ar-EG\n* `ar-IL` - ar-IL\n* `ar-IQ` - ar-IQ\n* `ar-JO` - ar-JO\n* `ar-KW` - ar-KW\n* `ar-LB` - ar-LB\n* `ar-LY` - ar-LY\n* `ar-MA` - ar-MA\n* `ar-OM` - ar-OM\n* `ar-PS` - ar-PS\n* `ar-QA` - ar-QA\n* `ar-SA` - ar-SA\n* `ar-SY` - ar-SY\n* `ar-TN` - ar-TN\n* `ar-YE` - ar-YE\n* `az-AZ` - az-AZ\n* `bg-BG` - bg-BG\n* `bn-IN` - bn-IN\n* `bs-BA` - bs-BA\n* `ca-ES` - ca-ES\n* `cs-CZ` - cs-CZ\n* `cy-GB` - cy-GB\n* `da-DK` - da-DK\n* `de-AT` - de-AT\n* `de-CH` - de-CH\n* `de-DE` - de-DE\n* `el-GR` - el-GR\n* `en-AU` - en-AU\n* `en-CA` - en-CA\n* `en-GB` - en-GB\n* `en-GH` - en-GH\n* `en-HK` - en-HK\n* `en-IE` - en-IE\n* `en-IN` - en-IN\n* `en-KE` - en-KE\n* `en-NG` - en-NG\n* `en-NZ` - en-NZ\n* `en-PH` - en-PH\n* `en-SG` - en-SG\n* `en-TZ` - en-TZ\n* `en-US` - en-US\n* `en-ZA` - en-ZA\n* `es-AR` - es-AR\n* `es-BO` - es-BO\n* `es-CL` - es-CL\n* `es-CO` - es-CO\n* `es-CR` - es-CR\n* `es-CU` - es-CU\n* `es-DO` - es-DO\n* `es-EC` - es-EC\n* `es-ES` - es-ES\n* `es-GQ` - es-GQ\n* `es-GT` - es-GT\n* `es-HN` - es-HN\n* `es-MX` - es-MX\n* `es-NI` - es-NI\n* `es-PA` - es-PA\n* `es-PE` - es-PE\n* `es-PR` - es-PR\n* `es-PY` - es-PY\n* `es-SV` - es-SV\n* `es-US` - es-US\n* `es-UY` - es-UY\n* `es-VE` - es-VE\n* `et-EE` - et-EE\n* `eu-ES` - eu-ES\n* `fa-IR` - fa-IR\n* `fi-FI` - fi-FI\n* `fil-PH` - fil-PH\n* `fr-BE` - fr-BE\n* `fr-CA` - fr-CA\n* `fr-CH` - fr-CH\n* `fr-FR` - fr-FR\n* `ga-IE` - ga-IE\n* `gl-ES` - gl-ES\n* `gu-IN` - gu-IN\n* `he-IL` - he-IL\n* `hi-IN` - hi-IN\n* `hr-HR` - hr-HR\n* `hu-HU` - hu-HU\n* `hy-AM` - hy-AM\n* `id-ID` - id-ID\n* `is-IS` - is-IS\n* `it-CH` - it-CH\n* `it-IT` - it-IT\n* `ja-JP` - ja-JP\n* `jv-ID` - jv-ID\n* `ka-GE` - ka-GE\n* `kk-KZ` - kk-KZ\n* `km-KH` - km-KH\n* `kn-IN` - kn-IN\n* `ko-KR` - ko-KR\n* `lo-LA` - lo-LA\n* `lt-LT` - lt-LT\n* `lv-LV` - lv-LV\n* `mk-MK` - mk-MK\n* `ml-IN` - ml-IN\n* `mn-MN` - mn-MN\n* `mr-IN` - mr-IN\n* `ms-MY` - ms-MY\n* `mt-MT` - mt-MT\n* `my-MM` - my-MM\n* `nb-NO` - nb-NO\n* `ne-NP` - ne-NP\n* `nl-BE` - nl-BE\n* `nl-NL` - nl-NL\n* `pa-IN` - pa-IN\n* `pl-PL` - pl-PL\n* `ps-AF` - ps-AF\n* `pt-BR` - pt-BR\n* `pt-PT` - pt-PT\n* `ro-RO` - ro-RO\n* `ru-RU` - ru-RU\n* `si-LK` - si-LK\n* `sk-SK` - sk-SK\n* `sl-SI` - sl-SI\n* `so-SO` - so-SO\n* `sq-AL` - sq-AL\n* `sr-RS` - sr-RS\n* `sv-SE` - sv-SE\n* `sw-KE` - sw-KE\n* `sw-TZ` - sw-TZ\n* `ta-IN` - ta-IN\n* `te-IN` - te-IN\n* `th-TH` - th-TH\n* `tr-TR` - tr-TR\n* `uk-UA` - uk-UA\n* `ur-IN` - ur-IN\n* `uz-UZ` - uz-UZ\n* `vi-VN` - vi-VN\n* `wuu-CN` - wuu-CN\n* `yue-CN` - yue-CN\n* `zh-CN` - zh-CN\n* `zh-CN-shandong` - zh-CN-shandong\n* `zh-CN-sichuan` - zh-CN-sichuan\n* `zh-HK` - zh-HK\n* `zh-TW` - zh-TW\n* `zu-ZA` - zu-ZA\n* `ot` - ot"
+      },
+      "GetCaption": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "resource_path": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200
+          },
+          "was_captioned": {
+            "type": "boolean"
+          },
+          "resource": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "captions": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "GetSubscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "plan": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "id",
+          "plan",
+          "status"
+        ]
+      },
+      "GetUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "phone_no": {
+            "type": "string",
+            "title": "Phone Number",
+            "maxLength": 25
+          },
+          "name": {
+            "type": "string",
+            "title": "Name of User",
+            "maxLength": 255
+          },
+          "has_active_subscription": {
+            "type": "boolean"
+          },
+          "free_mode_status": {
+            "type": "string"
+          },
+          "can_download": {
+            "type": "boolean"
+          },
+          "subscription_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionStatusEnum"
+              }
+            ],
+            "description": "If the payment is for a custom plan, then check by duration alloted\nelse check by number of videos subtitled",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "can_download",
+          "free_mode_status",
+          "has_active_subscription",
+          "id",
+          "phone_no",
+          "subscription_status"
+        ]
+      },
+      "IconEnum": {
+        "enum": [
+          "SAR",
+          "USD"
+        ],
+        "type": "string",
+        "description": "* `SAR` - SAR\n* `USD` - USD"
+      },
+      "ListCaption": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "resource_path": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200
+          },
+          "was_captioned": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200
+          },
+          "resource": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "created_at",
+          "id",
+          "updated_at"
+        ]
+      },
+      "NameEnum": {
+        "enum": [
+          "FREE",
+          "BASIC",
+          "PREMIUM",
+          "CUSTOM"
+        ],
+        "type": "string",
+        "description": "* `FREE` - FREE\n* `BASIC` - BASIC\n* `PREMIUM` - PREMIUM\n* `CUSTOM` - CUSTOM"
+      },
+      "NullEnum": {
+        "enum": [
+          null
+        ]
+      },
+      "PaginatedFromLanguageResponseList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FromLanguageResponse"
+            }
+          }
+        }
+      },
+      "PaginatedGetSubscriptionList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetSubscription"
+            }
+          }
+        }
+      },
+      "PaginatedListCaptionList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ListCaption"
+            }
+          }
+        }
+      },
+      "PaginatedSubscriptionPlansList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionPlans"
+            }
+          }
+        }
+      },
+      "PaginatedToLanguageResponseList": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 123
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=4"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "example": "http://api.example.org/accounts/?page=2"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToLanguageResponse"
+            }
+          }
+        }
+      },
+      "PatchedGetUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "phone_no": {
+            "type": "string",
+            "title": "Phone Number",
+            "maxLength": 25
+          },
+          "name": {
+            "type": "string",
+            "title": "Name of User",
+            "maxLength": 255
+          },
+          "has_active_subscription": {
+            "type": "boolean"
+          },
+          "free_mode_status": {
+            "type": "string"
+          },
+          "can_download": {
+            "type": "boolean"
+          },
+          "subscription_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionStatusEnum"
+              }
+            ],
+            "description": "If the payment is for a custom plan, then check by duration alloted\nelse check by number of videos subtitled",
+            "readOnly": true
+          }
+        }
+      },
+      "PatchedUpdateCaption": {
+        "type": "object",
+        "properties": {
+          "resource_path": {
+            "type": "string"
+          },
+          "captions": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "srt": {
+            "type": "string",
+            "format": "uri",
+            "writeOnly": true
+          },
+          "resource": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "PlanEnum": {
+        "enum": [
+          "FREE",
+          "BASIC",
+          "PREMIUM",
+          "CUSTOM"
+        ],
+        "type": "string",
+        "description": "* `FREE` - FREE\n* `BASIC` - BASIC\n* `PREMIUM` - PREMIUM\n* `CUSTOM` - CUSTOM"
+      },
+      "PriviledgeEnum": {
+        "enum": [
+          "CAN_DOWNLOAD",
+          "CAN_CREATE_SUBTILES"
+        ],
+        "type": "string",
+        "description": "* `CAN_DOWNLOAD` - User can download video to watch offline\n* `CAN_CREATE_SUBTILES` - User can add subtitles to video"
+      },
+      "SubscriptionPlans": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "name": {
+            "$ref": "#/components/schemas/NameEnum"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the plan"
+          },
+          "max_duration": {
+            "type": "string"
+          },
+          "slots": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": -2147483648
+          },
+          "type": {
+            "$ref": "#/components/schemas/TypeEnum"
+          },
+          "priviledges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionPriviledges"
+            }
+          }
+        },
+        "required": [
+          "description",
+          "id",
+          "priviledges"
+        ]
+      },
+      "SubscriptionPriviledges": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "description": {
+            "type": "string"
+          },
+          "priviledge": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PriviledgeEnum"
+              },
+              {
+                "$ref": "#/components/schemas/NullEnum"
+              }
+            ]
+          }
+        },
+        "required": [
+          "description",
+          "id"
+        ]
+      },
+      "SubscriptionStatusEnum": {
+        "enum": [
+          "ACTIVE",
+          "EXPIRED"
+        ],
+        "type": "string"
+      },
+      "TextTranslationResponse": {
+        "type": "object",
+        "properties": {
+          "translations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {},
+              "readOnly": true
+            }
+          }
+        },
+        "required": [
+          "translations"
+        ]
+      },
+      "ToLanguageResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/ToLanguageResponseValueEnum"
+          },
+          "label": {
+            "$ref": "#/components/schemas/ToLanguageResponseLabelEnum"
+          }
+        },
+        "required": [
+          "label",
+          "value"
+        ]
+      },
+      "ToLanguageResponseLabelEnum": {
+        "enum": [
+          "Afrikaans",
+          "Albanian",
+          "Amharic",
+          "Arabic",
+          "Armenian",
+          "Assamese",
+          "Azerbaijani",
+          "Bangla",
+          "Bosnian (Latin)",
+          "Bulgarian",
+          "Cantonese (Traditional)",
+          "Catalan",
+          "Chinese (Literary)",
+          "Chinese Simplified",
+          "Chinese Traditional",
+          "Croatian",
+          "Czech",
+          "Danish",
+          "Dari",
+          "Dutch",
+          "English",
+          "Estonian",
+          "Fijian",
+          "Filipino",
+          "Finnish",
+          "French",
+          "French (Canada)",
+          "German",
+          "Greek",
+          "Gujarati",
+          "Haitian Creole",
+          "Hebrew",
+          "Hindi",
+          "Hmong Daw",
+          "Hungarian",
+          "Icelandic",
+          "Indonesian",
+          "Inuktitut",
+          "Irish",
+          "Italian",
+          "Japanese",
+          "Kannada",
+          "Kazakh",
+          "Khmer",
+          "Klingon",
+          "Klingon (plqaD)",
+          "Korean",
+          "Kurdish (Central)",
+          "Kurdish (Northern)",
+          "Lao",
+          "Latvian",
+          "Lithuanian",
+          "Malagasy",
+          "Malay",
+          "Malayalam",
+          "Maltese",
+          "Maori",
+          "Marathi",
+          "Myanmar",
+          "Nepali",
+          "Norwegian",
+          "Odia",
+          "Pashto",
+          "Persian",
+          "Polish",
+          "Portuguese (Brazil)",
+          "Portuguese (Portugal)",
+          "Punjabi",
+          "Queretaro Otomi",
+          "Romanian",
+          "Russian",
+          "Samoan",
+          "Serbian (Cyrillic)",
+          "Serbian (Latin)",
+          "Slovak",
+          "Slovenian",
+          "Spanish",
+          "Swahili",
+          "Swedish",
+          "Tahitian",
+          "Tamil",
+          "Telugu",
+          "Thai",
+          "Tigrinya",
+          "Tongan",
+          "Turkish",
+          "Ukrainian",
+          "Urdu",
+          "Vietnamese",
+          "Welsh",
+          "Yucatec Maya",
+          "Others"
+        ],
+        "type": "string",
+        "description": "* `Afrikaans` - Afrikaans\n* `Albanian` - Albanian\n* `Amharic` - Amharic\n* `Arabic` - Arabic\n* `Armenian` - Armenian\n* `Assamese` - Assamese\n* `Azerbaijani` - Azerbaijani\n* `Bangla` - Bangla\n* `Bosnian (Latin)` - Bosnian (Latin)\n* `Bulgarian` - Bulgarian\n* `Cantonese (Traditional)` - Cantonese (Traditional)\n* `Catalan` - Catalan\n* `Chinese (Literary)` - Chinese (Literary)\n* `Chinese Simplified` - Chinese Simplified\n* `Chinese Traditional` - Chinese Traditional\n* `Croatian` - Croatian\n* `Czech` - Czech\n* `Danish` - Danish\n* `Dari` - Dari\n* `Dutch` - Dutch\n* `English` - English\n* `Estonian` - Estonian\n* `Fijian` - Fijian\n* `Filipino` - Filipino\n* `Finnish` - Finnish\n* `French` - French\n* `French (Canada)` - French (Canada)\n* `German` - German\n* `Greek` - Greek\n* `Gujarati` - Gujarati\n* `Haitian Creole` - Haitian Creole\n* `Hebrew` - Hebrew\n* `Hindi` - Hindi\n* `Hmong Daw` - Hmong Daw\n* `Hungarian` - Hungarian\n* `Icelandic` - Icelandic\n* `Indonesian` - Indonesian\n* `Inuktitut` - Inuktitut\n* `Irish` - Irish\n* `Italian` - Italian\n* `Japanese` - Japanese\n* `Kannada` - Kannada\n* `Kazakh` - Kazakh\n* `Khmer` - Khmer\n* `Klingon` - Klingon\n* `Klingon (plqaD)` - Klingon (plqaD)\n* `Korean` - Korean\n* `Kurdish (Central)` - Kurdish (Central)\n* `Kurdish (Northern)` - Kurdish (Northern)\n* `Lao` - Lao\n* `Latvian` - Latvian\n* `Lithuanian` - Lithuanian\n* `Malagasy` - Malagasy\n* `Malay` - Malay\n* `Malayalam` - Malayalam\n* `Maltese` - Maltese\n* `Maori` - Maori\n* `Marathi` - Marathi\n* `Myanmar` - Myanmar\n* `Nepali` - Nepali\n* `Norwegian` - Norwegian\n* `Odia` - Odia\n* `Pashto` - Pashto\n* `Persian` - Persian\n* `Polish` - Polish\n* `Portuguese (Brazil)` - Portuguese (Brazil)\n* `Portuguese (Portugal)` - Portuguese (Portugal)\n* `Punjabi` - Punjabi\n* `Queretaro Otomi` - Queretaro Otomi\n* `Romanian` - Romanian\n* `Russian` - Russian\n* `Samoan` - Samoan\n* `Serbian (Cyrillic)` - Serbian (Cyrillic)\n* `Serbian (Latin)` - Serbian (Latin)\n* `Slovak` - Slovak\n* `Slovenian` - Slovenian\n* `Spanish` - Spanish\n* `Swahili` - Swahili\n* `Swedish` - Swedish\n* `Tahitian` - Tahitian\n* `Tamil` - Tamil\n* `Telugu` - Telugu\n* `Thai` - Thai\n* `Tigrinya` - Tigrinya\n* `Tongan` - Tongan\n* `Turkish` - Turkish\n* `Ukrainian` - Ukrainian\n* `Urdu` - Urdu\n* `Vietnamese` - Vietnamese\n* `Welsh` - Welsh\n* `Yucatec Maya` - Yucatec Maya\n* `Others` - Others"
+      },
+      "ToLanguageResponseValueEnum": {
+        "enum": [
+          "af",
+          "sq",
+          "am",
+          "ar",
+          "hy",
+          "as",
+          "az",
+          "bn",
+          "bs",
+          "bg",
+          "yue",
+          "ca",
+          "lzh",
+          "zh-Hans",
+          "zh-Hant",
+          "hr",
+          "cs",
+          "da",
+          "prs",
+          "nl",
+          "en",
+          "et",
+          "fj",
+          "fil",
+          "fi",
+          "fr",
+          "fr-ca",
+          "de",
+          "el",
+          "gu",
+          "ht",
+          "he",
+          "hi",
+          "mww",
+          "hu",
+          "is",
+          "id",
+          "iu",
+          "ga",
+          "it",
+          "ja",
+          "kn",
+          "kk",
+          "km",
+          "tlh-Latn",
+          "tlh-Piqd",
+          "ko",
+          "ku",
+          "kmr",
+          "lo",
+          "lv",
+          "lt",
+          "mg",
+          "ms",
+          "ml",
+          "mt",
+          "mi",
+          "mr",
+          "my",
+          "ne",
+          "nb",
+          "or",
+          "ps",
+          "fa",
+          "pl",
+          "pt",
+          "pt-pt",
+          "pa",
+          "otq",
+          "ro",
+          "ru",
+          "sm",
+          "sr-Cyrl",
+          "sr-Latn",
+          "sk",
+          "sl",
+          "es",
+          "sw",
+          "sv",
+          "ty",
+          "ta",
+          "te",
+          "th",
+          "ti",
+          "to",
+          "tr",
+          "uk",
+          "ur",
+          "vi",
+          "cy",
+          "yua",
+          "ot"
+        ],
+        "type": "string",
+        "description": "* `af` - af\n* `sq` - sq\n* `am` - am\n* `ar` - ar\n* `hy` - hy\n* `as` - as\n* `az` - az\n* `bn` - bn\n* `bs` - bs\n* `bg` - bg\n* `yue` - yue\n* `ca` - ca\n* `lzh` - lzh\n* `zh-Hans` - zh-Hans\n* `zh-Hant` - zh-Hant\n* `hr` - hr\n* `cs` - cs\n* `da` - da\n* `prs` - prs\n* `nl` - nl\n* `en` - en\n* `et` - et\n* `fj` - fj\n* `fil` - fil\n* `fi` - fi\n* `fr` - fr\n* `fr-ca` - fr-ca\n* `de` - de\n* `el` - el\n* `gu` - gu\n* `ht` - ht\n* `he` - he\n* `hi` - hi\n* `mww` - mww\n* `hu` - hu\n* `is` - is\n* `id` - id\n* `iu` - iu\n* `ga` - ga\n* `it` - it\n* `ja` - ja\n* `kn` - kn\n* `kk` - kk\n* `km` - km\n* `tlh-Latn` - tlh-Latn\n* `tlh-Piqd` - tlh-Piqd\n* `ko` - ko\n* `ku` - ku\n* `kmr` - kmr\n* `lo` - lo\n* `lv` - lv\n* `lt` - lt\n* `mg` - mg\n* `ms` - ms\n* `ml` - ml\n* `mt` - mt\n* `mi` - mi\n* `mr` - mr\n* `my` - my\n* `ne` - ne\n* `nb` - nb\n* `or` - or\n* `ps` - ps\n* `fa` - fa\n* `pl` - pl\n* `pt` - pt\n* `pt-pt` - pt-pt\n* `pa` - pa\n* `otq` - otq\n* `ro` - ro\n* `ru` - ru\n* `sm` - sm\n* `sr-Cyrl` - sr-Cyrl\n* `sr-Latn` - sr-Latn\n* `sk` - sk\n* `sl` - sl\n* `es` - es\n* `sw` - sw\n* `sv` - sv\n* `ty` - ty\n* `ta` - ta\n* `te` - te\n* `th` - th\n* `ti` - ti\n* `to` - to\n* `tr` - tr\n* `uk` - uk\n* `ur` - ur\n* `vi` - vi\n* `cy` - cy\n* `yua` - yua\n* `ot` - ot"
+      },
+      "TranslateText": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "TypeEnum": {
+        "enum": [
+          "DEFAULT",
+          "ONE_MONTH",
+          "ONE_YEAR"
+        ],
+        "type": "string",
+        "description": "* `DEFAULT` - DEFAULT\n* `ONE_MONTH` - ONE_MONTH\n* `ONE_YEAR` - ONE_YEAR"
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid"
+      },
+      "jwtAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

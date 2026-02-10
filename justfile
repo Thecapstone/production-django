@@ -9,6 +9,10 @@ export COMPOSE_FILE := "docker-compose.local.yml"
 default:
     @just --list
 
+# build and up: Build and start up containers.
+build-up:
+    @docker compose up -d --build --remove-orphans
+
 # build: Build python image.
 build *args:
     @echo "Building python image..."

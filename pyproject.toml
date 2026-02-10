@@ -61,6 +61,7 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
+
 select = [
     "F",
     "E",
@@ -165,21 +166,27 @@ authors = [
 requires-python = "==3.13.*"
 dependencies = [
     "argon2-cffi==25.1.0",
+    "channels-redis==4.2.0",
+    "channels[daphne]==4.1.0",
     "crispy-bootstrap5==2025.6",
     "django==5.2.11",
     "django-allauth[mfa]==65.14.0",
     "django-anymail==14.0",
+    "django-auto-prefetch",
     "django-cors-headers==4.9.0",
     "django-crispy-forms==2.5",
     "django-environ==0.12.0",
+    "django-filter",
     "django-model-utils==5.0.0",
     "django-redis==6.0.0",
     "djangorestframework==3.16.1",
+    "djoser",
     "drf-spectacular==0.29.0",
     "gunicorn==25.0.1",
     "hiredis==3.3.0",
     "pillow==12.1.0",
     "psycopg[c]==3.3.2",
+    "pyotp",
     "python-slugify==8.0.4",
     "redis==7.1.0",
     "whitenoise==6.11.0",
