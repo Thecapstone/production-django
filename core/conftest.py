@@ -1,7 +1,7 @@
 import pytest
 
-from cookiecutter_django.users.models import User
-from cookiecutter_django.users.tests.factories import UserFactory
+from core.users.models import User
+from core.users.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)

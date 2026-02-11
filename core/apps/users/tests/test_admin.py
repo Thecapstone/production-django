@@ -8,7 +8,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
 from pytest_django.asserts import assertRedirects
 
-from cookiecutter_django.users.models import User
+from core.users.models import User
 
 
 class TestUserAdmin:
@@ -48,7 +48,7 @@ class TestUserAdmin:
     def _force_allauth(self, settings):
         settings.DJANGO_ADMIN_FORCE_ALLAUTH = True
         # Reload the admin module to apply the setting change
-        import cookiecutter_django.users.admin as users_admin  # noqa: PLC0415
+        import core.users.admin as users_admin  # noqa: PLC0415
 
         with contextlib.suppress(admin.sites.AlreadyRegistered):  # type: ignore[attr-defined]
             reload(users_admin)

@@ -1,8 +1,8 @@
 import pytest
 from rest_framework.test import APIRequestFactory
 
-from cookiecutter_django.users.api.views import UserViewSet
-from cookiecutter_django.users.models import User
+from core.users.api.views import UserViewSet
+from core.users.models import User
 
 
 class TestUserViewSet:

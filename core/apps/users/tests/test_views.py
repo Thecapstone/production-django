@@ -12,12 +12,12 @@ from django.test import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from cookiecutter_django.users.forms import UserAdminChangeForm
-from cookiecutter_django.users.models import User
-from cookiecutter_django.users.tests.factories import UserFactory
-from cookiecutter_django.users.views import UserRedirectView
-from cookiecutter_django.users.views import UserUpdateView
-from cookiecutter_django.users.views import user_detail_view
+from core.users.forms import UserAdminChangeForm
+from core.users.models import User
+from core.users.tests.factories import UserFactory
+from core.users.views import UserRedirectView
+from core.users.views import UserUpdateView
+from core.users.views import user_detail_view
 
 pytestmark = pytest.mark.django_db
 

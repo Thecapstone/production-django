@@ -2,8 +2,8 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from cookiecutter_django.users.forms import UserAdminCreationForm
-from cookiecutter_django.users.models import User
+from core.users.forms import UserAdminCreationForm
+from core.users.models import User
 
 
 class TestUserAdminCreationForm:

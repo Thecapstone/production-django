@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from cookiecutter_django.users.models import User
+from core.users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer[User]):

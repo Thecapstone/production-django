@@ -6,7 +6,7 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cookiecutter_django.users.models import User
+from core.users.models import User
 
 from .serializers import UserSerializer
 
