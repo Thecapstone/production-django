@@ -11,7 +11,7 @@ class QuestionAndAnswer(models.Model):
         As a writer, I want to ask structured questions about my work so that I can receive targeted 
         feedback.
     """
-    title = models.TextField()
+    title = models.CharField(max_length=255)
     community = models.ForeignKey("users.Community", default=None, null=True, blank=True, on_delete=models.SET_NULL, related_name="questions")
     original = models.BooleanField(default=False)  # False if this is the original question, False if it's a reply
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="questions")
@@ -36,10 +36,17 @@ class IdeaThread(models.Model):
         into multiple posts.
     """
     content = models.CharField(max_length=250)
+    original = models.BooleanField(default=False)  # False if this is the original post, False if it's a reply
     community = models.ForeignKey("users.Community", default=None, null=True, blank=True, on_delete=models.SET_NULL, related_name="idea_threads")
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="idea_threads")
     likes = models.IntegerField(default=0)
     comments = models.ForeignKey("self", on_delete=models.CASCADE, related_name="idea_thread_comments", blank=True, null=True)
 
 
-class 
+class LongDraft(models.Model):
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="long_draft")
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    community = models.ForeignKey("users.community", default=None, null=True, on_delete=models.SET_NULL, related_name="long_draft")
+    comment = models.ForeignKey("self", on_delete=models.CASCADE, related_name="long_draft_comments", blank=True, null=True, max_length=400)
+
