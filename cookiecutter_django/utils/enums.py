@@ -19,4 +19,8 @@ class CommentReportReason(TextChoices):
     OTHER = ("other", "other")
 
 class CommunityReportReason(TextChoices):
-    ...
+    HATE = ("hate", "hate")
+    VIOLENCE = ("violence", "violence")
+    ILLEGAL_ACTIVITIES = ("illegal_activities", "illegal_activities")
+    INAPPROPRIATE_CONTENT = ("inappropriate_content", "inappropriate_content")
+    OTHER = ("other", "other")

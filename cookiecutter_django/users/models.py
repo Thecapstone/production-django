@@ -6,7 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from cookiecutter_django.utils.enums import CommentReportReason, ModeratorRoles
+from cookiecutter_django.utils.enums import CommentReportReason, CommunityReportReason, ModeratorRoles
 from cookiecutter_django.utils.models import UIDTimeBasedModel
 
 from .managers import UserManager
@@ -71,6 +71,34 @@ class Community(UIDTimeBasedModel):
         Description: {self.description}
         Rules: {self.rules}
         """
+class Project(UIDTimeBasedModel):
+    name = models.CharField(_("Name of Project"), blank=False, max_length=255)
+    description = models.TextField(_("Description of Project"), blank=True)
+    creator = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='project_creator')
+    managers = models.ManyToManyField('users,User', related_name='project_managers', blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models. DateTimeField(auto_now=True)
+
+    @classmethod
+    def open_project(cls, name, description, creator, managers=None):
+        """
+        Creates and returns a new project
+        """
+        project = cls.objects.create(name=name, description=description, creator=creator)
+        if managers:
+            project.managers.set(managers)
+        
+        return project
+    
+    def close_project(self):
+        """Deletes this project."""
+
+        self.delete()
+
+    def __str__(self):
+        return self.name
+    
 
 class ReportComment(UIDTimeBasedModel):
     reporter = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="reporter")
@@ -89,8 +117,10 @@ class ReportComment(UIDTimeBasedModel):
 class ReportCommunity(UIDTimeBasedModel):
     reporter = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="community_reporter")
     community = models.ForeignKey("users.Community", on_delete=models.CASCADE, related_name="reported_community")
-    reason_tag = models.CharField(_("Tag of Report"), choices=CommentReportReason.choices, blank=False, max_length=255)
+    reason_tag = models.CharField(_("Tag of Report"), choices=CommunityReportReason.choices, blank=False, max_length=255)
+    reason = models.TextField(_("Reason for Report"), blank=False)
 
     def __str__(self) -> str:
-        return f"Comment by {self.commenter.name} on report: {self.comment}"
+        return f"Report by {self.reporter.name} against: {self.community.name} for: {self.reason}"
+    
 
