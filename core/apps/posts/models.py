@@ -10,7 +10,7 @@ class Bookmark(models.Model):
     Users can bookmark any content (questions, idea threads, or long drafts) for easy access later.
     """
 
-    users = models.ManyToManyField("users.User", on_delete=models.CASCADE, related_name="bookmarks")
+    users = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks")
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.positiveIntegerField()
@@ -55,10 +55,10 @@ class QuestionAndAnswer(BaseContent):
     downvotes = models.IntegerField(default=0)
     most_helpful = models.ForeignKey("self", on_delete=models.SET_NULL, related_name="most_helpful_reply", blank=True, null=True)
 
-    @property
-    def bookmark_count(self) -> int:
-        from core.apps.users.models import User
-        return User.objects.filter(booksmarks=self.id).count()
+    #@property
+    #def bookmark_count(self) -> int:
+        #from core.apps.users.models import User
+        #return User.objects.filter(booksmarks=self.id).count()
 
 
 class IdeaThread(BaseContent):
