@@ -26,7 +26,7 @@ class User(AbstractUser):
     last_name = None  # type: ignore[assignment]
     email = models.EmailField(_("email address"), unique=True)
     username = None  # type: ignore[assignment]
-    bookmarks = models.ManyToManyField("posts.Question", related_name="booksmarks", blank=True)
+    bookmarks = models.ManyToManyField("posts.Bookmark", related_name="booksmarks", blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
