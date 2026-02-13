@@ -44,9 +44,25 @@ class IdeaThread(models.Model):
 
 
 class LongDraft(models.Model):
+    """
+    Article-based discussions
+    
+    Story: As a premium writer, I want to publish complete drafts without breaking them into parts.
+    """
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="long_draft")
     title = models.CharField(max_length=255)
     content = models.TextField()
     community = models.ForeignKey("users.community", default=None, null=True, on_delete=models.SET_NULL, related_name="long_draft")
     comment = models.ForeignKey("self", on_delete=models.CASCADE, related_name="long_draft_comments", blank=True, null=True, max_length=400)
+    likes = models.IntegerField(default=0)
 
+class bookmark(models.Model):
+    """
+    Bookmarking System
+    Story:
+        As a user, I want to bookmark questions and threads so that I can easily find them later.
+    """
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks")
+    question = models.ForeignKey("QuestionAndAnswer", on_delete=models.CASCADE, related_name="bookmarked_questions", blank=True, null=True)
+    idea_thread = models.ForeignKey("IdeaThread", on_delete=models.CASCADE, related_name="bookmarked_idea_threads", blank=True, null=True)
+    long_draft = models.ForeignKey("LongDraft", on_delete=models.CASCADE, related_name="bookmarked_long_drafts", blank=True, null=True)
