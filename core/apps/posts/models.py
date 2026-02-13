@@ -1,7 +1,24 @@
 from typing import Self
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from django.contrib.postgres.fields import ArrayField
+
+class Bookmark(models.Model):
+    """
+    Users can bookmark any content (questions, idea threads, or long drafts) for easy access later.
+    """
+
+    users = models.ManyToManyField("users.User", on_delete=models.CASCADE, related_name="bookmarks")
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.positiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("users", "content_type", "object_id")
 
 class BaseContent(models.Model):
     """
@@ -12,6 +29,15 @@ class BaseContent(models.Model):
     parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    @property
+    def bookmark_count(self) -> int:
+        content_type = ContentType.objects.get_for_model(self)
+        return Bookmark.objects.filter(content_type=content_type, object_id = self.id).count()
+
 
 class QuestionAndAnswer(BaseContent):
     """
