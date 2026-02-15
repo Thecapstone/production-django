@@ -8,6 +8,7 @@ class ModeratorRoles(TextChoices):
     COMPLIANCE = ("compliance", "compliance")
     CONTENT = ("content", "content")
     COMMUNITY = ("community", "community")
+    PROJECT = ("project", "project")
     REPORTS = ("reports", "reports")
 
 
