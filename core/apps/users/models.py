@@ -1,5 +1,6 @@
 
 from typing import ClassVar
+from typing import TYPECHECKING
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -10,6 +11,12 @@ from core.utils.enums import CommentReportReason, CommunityReportReason, Moderat
 from core.utils.models import UIDTimeBasedModel
 
 from .managers import UserManager
+
+if TYPECHECKING:
+    from core.apps.posts.models import Bookmark
+    from core.apps.posts.models import QuestionAndAnswer
+    from core.apps.posts.models import IdeaThread
+    from core.apps.posts.models import LongDraft
 
 
 
@@ -26,7 +33,10 @@ class User(AbstractUser):
     last_name = None  # type: ignore[assignment]
     email = models.EmailField(_("email address"), unique=True)
     username = None  # type: ignore[assignment]
-    bookmarks = models.ManyToManyField("posts.Bookmark", related_name="booksmarks", blank=True)
+    bookmarks: models.QuerySet[Bookmark]
+    surveys: models.QuerySet[QuestionAndAnswer]
+    ideas: models.QuerySet[IdeaThread]
+    articles: models.QuerySet[LongDraft]
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -41,6 +51,15 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"pk": self.id})
+
+class Project(UIDTimeBasedModel):
+    admin = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="project")
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    managers = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRoles.choices, related_name="project_managers", blank=True)
+    members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
+    rules = models.TextField(_("Project Rules"), blank=True)
+
 
 class ModeratorPermission(UIDTimeBasedModel):
     role = models.CharField(_("Tag of Permission"), choices=ModeratorRoles.choices, blank=False, max_length=255, unique=True)
@@ -63,6 +82,7 @@ class Community(UIDTimeBasedModel):
     description = models.TextField(_("Description of Community"), blank=True)
     rules = models.TextField(_("Rules of Community"), blank=True)
     emoji = models.CharField(_("Emoji for Community"), blank=True, max_length=10)
+    project_container = models.ForeignKey("users.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="linked_project")
 
     def __str__(self) -> str:
         return self.name
