@@ -3,8 +3,12 @@ from typing import TYPE_CHECKING
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager as DjangoUserManager
 
+from django.db.models import Manager as Manager_
+from django.db import models
+
 if TYPE_CHECKING:
     from .models import User  # noqa: F401
+    from .models import Community  # noqa: F401
 
 
 class UserManager(DjangoUserManager["User"]):
@@ -46,3 +50,36 @@ class UserManager(DjangoUserManager["User"]):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
+
+
+class CommunityManager:
+
+    class Base:
+        def create_community(self: models.QuerySet["Community"], title: str, description: str, creator: "User") -> "Community":
+            """Create a new community with the given title, description, and creator."""
+            community = self.model(title=title, description=description, creator=creator)
+            community.save(using=self._db)
+            return community
+
+        def update_community(self: models.QuerySet["Community"], community: "Community", title: str | None = None, description: str | None = None, rules: str | None = None) -> "Community":
+            """Update the given community with the provided title, description, and rules."""
+
+            if title is not None:
+                community.title = title
+            if description is not None:
+                community.description = description
+            if rules is not None:
+                community.rules = rules
+            community.save(using=self._db)
+            return community
+
+        def start_with_x(self: models.QuerySet["Community"], x: str) -> models.QuerySet["Community"]:
+            """Return a queryset of communities whose names start with the letter 'A'."""
+            return self.filter(name__istartswith=x)
+
+    class Manager(Base, Manager_["Community"]):
+        def get_queryset(self) -> models.QuerySet["Community"]:
+            return CommunityManager.QuerySet(self.model, using=self._db)
+
+    class QuerySet(models.QuerySet["Community"], Base):
+        ...

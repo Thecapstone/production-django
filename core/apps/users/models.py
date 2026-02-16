@@ -10,7 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from core.utils.enums import CommentReportReason, CommunityReportReason, ModeratorRoles
 from core.utils.models import UIDTimeBasedModel
 
-from .managers import UserManager
+from .managers import CommunityManager, UserManager
+
 
 if TYPECHECKING:
     from core.apps.posts.models import Bookmark
@@ -74,6 +75,7 @@ class Moderator(UIDTimeBasedModel):
     permissions = models.ManyToManyField("users.ModeratorPermission", related_name="moderator_permissions")
 
 class Community(UIDTimeBasedModel):
+    objects: ClassVar["CommunityManager.Manager"] = CommunityManager.Manager()
     name = models.CharField(_("Name of Community"), blank=False, max_length=255)
     admin = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="admin")
     sub_admins = models.ManyToManyField("users.User", related_name="sub_admins", blank=True)
@@ -87,7 +89,7 @@ class Community(UIDTimeBasedModel):
     def __str__(self) -> str:
         return self.name
 
-    def about(self) -> str:
+    def about(self: "Community") -> str:
         return f"""{self.name} is a community managed by {self.admin.name}.
         It has {self.moderators.count()} moderators and {self.members.count()} members.
         Description: {self.description}
