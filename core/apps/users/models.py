@@ -53,10 +53,10 @@ class User(AbstractUser):
         return reverse("users:detail", kwargs={"pk": self.id})
 
 class Project(UIDTimeBasedModel):
-    admin = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="project")
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    managers = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRoles.choices, related_name="project_managers", blank=True)
+    title = models.CharField(_("Title of Project"), max_length=255, blank=False, null=False)
+    admin = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="admin")
+    about = models.TextField(_("Description of the Project"), blank=True)
+    moderators = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRoles.choices, related_name="project_managers", blank=True)
     members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
     rules = models.TextField(_("Project Rules"), blank=True)
 
@@ -82,7 +82,7 @@ class Community(UIDTimeBasedModel):
     description = models.TextField(_("Description of Community"), blank=True)
     rules = models.TextField(_("Rules of Community"), blank=True)
     emoji = models.CharField(_("Emoji for Community"), blank=True, max_length=10)
-    project_container = models.ForeignKey("users.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="linked_project")
+    project_container = models.ForeignKey("users.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="project_container")
 
     def __str__(self) -> str:
         return self.name
