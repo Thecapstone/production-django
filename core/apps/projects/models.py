@@ -1,4 +1,4 @@
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -7,12 +7,15 @@ from core.utils.enums import ModeratorRoles
 from .managers import ProjectManager
 
 
+if TYPE_CHECKING:
+    from core.apps.users.models import Moderator  # noqa: TC004
+
 
 class Project(UIDTimeBasedModel):
     title = models.CharField(max_length=255)
     creator = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="creator")
     about = models.TextField(_("Description of the Project"), blank=True)
-    moderators = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRoles.choices, related_name="project_managers", blank=True)
+    moderators: models.QuerySet["Moderator"] = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRoles.choices, related_name="project_managers", blank=True)
     members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
     rules = models.TextField(_("Project Rules"), blank=True)
     objects: ClassVar[ProjectManager.Manager] = ProjectManager.Manager()
@@ -22,8 +25,21 @@ class Project(UIDTimeBasedModel):
         Description: {self.about}
         Rules: {self.rules}
         """
-    
-    
+
+    def save(self, *args, **kwargs):
+        """Override save method to ensure that the creator is always a moderator of the project."""
+        project = super().save(*args, **kwargs)
+        project.moderators.set(project.creator)
+        return project
+
+    def add_moderators(self, moderators: list["Moderator"]) -> None:
+        """Add moderators to the project."""
+        self.moderators.add(*moderators)
+
+    def remove_moderators(self, moderators: list["Moderator"]) -> None:
+        """Remove moderators from the project."""
+        self.moderators.remove(*moderators)
+
     def __str__(self):
         return self.title
 

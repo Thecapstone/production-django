@@ -49,6 +49,16 @@ class UserManager(DjangoUserManager["User"]):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
+    
+
+    def testing(self, email:str, *args: list, **kwargs: dict):
+        # args = ["a", "b", "c"]
+        # *args =  testing(a, b, c)
+
+        #kwargs = {"a": 1, "b": 2, "c": 3}
+        # **kwargs = testing(a=1, b=2, c=3)
+        """Create a testing user with the given email."""
+        return self._create_user(email, None, **kwargs)
 
 
 class CommunityManager:

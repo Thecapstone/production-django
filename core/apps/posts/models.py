@@ -19,7 +19,7 @@ class Bookmark(UIDTimeBasedModel):
 
     class Meta:
         unique_together = ("users", "content_type", "object_id")
-    
+
 
 class BaseContent(UIDTimeBasedModel):
     """
@@ -36,7 +36,7 @@ class BaseContent(UIDTimeBasedModel):
     @property
     def bookmark_count(self) -> int:
         content_type = ContentType.objects.get_for_model(self)
-        return Bookmark.objects.filter(content_type=content_type, object_id = self.id).count()
+        return Bookmark.objects.filter(content_type=content_type, object_id=self.id).count()
 
 
 class QuestionAndAnswer(BaseContent):
@@ -49,7 +49,7 @@ class QuestionAndAnswer(BaseContent):
     title = models.CharField(max_length=255)
     content = models.CharField(max_length=250)
     original = models.BooleanField(default=False)  # True if this is the original question, False if it's a reply
-    choices = ArrayField(models.CharField(max_length=255))  # List of choices for the question
+    choices = ArrayField(models.CharField(max_length=255), null=True, blank=True)  # List of choices for the question
     """["Choice 1", "Choice 2", "Choice 3"]"""
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
@@ -71,7 +71,7 @@ class IdeaThread(BaseContent):
 class LongDraft(BaseContent):
     """
     Article-based discussions
-    
+
     Story: As a premium writer, I want to publish complete drafts without breaking them into parts.
     """
     title = models.CharField(max_length=255)

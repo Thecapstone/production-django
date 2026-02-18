@@ -1,25 +1,25 @@
-
+from typing import TYPE_CHECKING, ClassVar
 from django.db.models import Manager as Manager_
 from django.db import models
 
-from .models import Project
-from core.apps.users.models import User
+
+if TYPE_CHECKING:
+    from core.apps.projects.models import Project
+    from core.apps.users.models import User
+
 
 
 class ProjectManager:
 
     class Base:
-        def open_project(self: models.QuerySet["Project"], title: str, creator:"User", about: str, moderators: list["User"] | None = None) -> "Project":
+        def open_project(self: models.QuerySet["Project"], title: str, creator:"User", about: str) -> "Project":
             """ Creates a new project with the given title, creator, about, and moderators."""
-            project = self.model(title=title, creator=creator, about=about)
-
-            if moderators is not None:
-                project.moderators.set(moderators)
+            project: "Project" = self.model(title=title, creator=creator, about=about)
 
             project.save(using=self._db)
+            project.moderators.set(project.creator)
             return project
-        
-        
+
         def set_creator_as_super_moderator(self: models.QuerySet["Project"], project: "Project") -> "Project":
             """Set the creator as a super moderator of the project."""
             project.moderators.add(project.creator)
