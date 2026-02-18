@@ -1,5 +1,5 @@
 
-from typing import ClassVar
+from typing import ClassVar, Self
 from typing import TYPECHECKING
 
 from django.contrib.auth.models import AbstractUser
@@ -52,14 +52,6 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"pk": self.id})
-
-class Project(UIDTimeBasedModel):
-    title = models.CharField(_("Title of Project"), max_length=255, blank=False, null=False)
-    admin = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="admin")
-    about = models.TextField(_("Description of the Project"), blank=True)
-    moderators = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRoles.choices, related_name="project_managers", blank=True)
-    members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
-    rules = models.TextField(_("Project Rules"), blank=True)
 
 
 class ModeratorPermission(UIDTimeBasedModel):

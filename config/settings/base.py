@@ -4,7 +4,7 @@
 
 from pathlib import Path
 
-import environ
+from os import environ
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # cookiecutter_django/
@@ -85,7 +85,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "cookiecutter_django.users",
+    "core.apps.users",
+    "core.apps.posts"
+    "core.apps.projects"
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -94,7 +96,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-MIGRATION_MODULES = {"sites": "cookiecutter_django.contrib.sites.migrations"}
+MIGRATION_MODULES = {"sites": "core.contrib.sites.migrations"}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -190,7 +192,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "cookiecutter_django.users.context_processors.allauth_settings",
+                "core.apps.users.context_processors.allauth_settings",
             ],
         },
     },
@@ -278,13 +280,13 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # https://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://docs.allauth.org/en/latest/account/configuration.html
-ACCOUNT_ADAPTER = "cookiecutter_django.users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "core.apps.users.adapters.AccountAdapter"
 # https://docs.allauth.org/en/latest/account/forms.html
-ACCOUNT_FORMS = {"signup": "cookiecutter_django.users.forms.UserSignupForm"}
+ACCOUNT_FORMS = {"signup": "core.apps.users.forms.UserSignupForm"}
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
-SOCIALACCOUNT_ADAPTER = "cookiecutter_django.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "core.apps.users.adapters.SocialAccountAdapter"
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
-SOCIALACCOUNT_FORMS = {"signup": "cookiecutter_django.users.forms.UserSocialSignupForm"}
+SOCIALACCOUNT_FORMS = {"signup": "core.apps.users.forms.UserSocialSignupForm"}
 
 # django-rest-framework
 # -------------------------------------------------------------------------------

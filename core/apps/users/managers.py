@@ -10,7 +10,6 @@ if TYPE_CHECKING:
     from .models import User  # noqa: F401
     from .models import Community  # noqa: F401
 
-
 class UserManager(DjangoUserManager["User"]):
     """Custom manager for the User model."""
 
@@ -83,3 +82,5 @@ class CommunityManager:
 
     class QuerySet(models.QuerySet["Community"], Base):
         ...
+
+

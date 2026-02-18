@@ -23,7 +23,7 @@ class Bookmark(UIDTimeBasedModel):
 
 class BaseContent(UIDTimeBasedModel):
     """
-    Base model for content containing all common fields
+    Base model for content containing all common post fields
     """
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="published_by")
     community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="content_community")
