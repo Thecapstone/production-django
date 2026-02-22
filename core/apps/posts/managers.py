@@ -45,6 +45,7 @@ class PostsManager:
 
     class Base:
         def create_post(self: models.QuerySet["IdeaThread" | "QuestionAndAnswer" | "LongDraft"], data: QuestionAndAnswerPostType | IdeaThreadPostType | LongDraftPostType, **kwargs) -> IdeaThread| LongDraft| QuestionAndAnswer:
+            """ Creates a new post (QuestionAndAnswer, IdeaThread, or LongDraft) based on the post type."""
 
             post_type = self.__class__.__name__ # IdeaThread or QuestionAndAnswer or LongDraft
             base_data = BasePostType(**{k: v for k, v in data.items() if k in BasePostType.__annotations__}).__dict__
@@ -62,7 +63,9 @@ class PostsManager:
 
             return post.save()
         
-        def update_post(self, post_id, user_id, title: str | None = None) -> IdeaThread| LongDraft| QuestionAndAnswer:
+        def update_post(self, post_id, user_id, title: str | None = None, content:str|None=None, choices:str|None=None) -> IdeaThread| LongDraft| QuestionAndAnswer:
+            """
+            Updates a post (QuestionAndAnswer, IdeaThread, or LongDraft) based on the post type and post id. Only the original creator can update a post."""
             post = self.get(id=post_id)
 
             if post.user_id != user_id:
@@ -70,48 +73,36 @@ class PostsManager:
             
             if hasattr(post, "title") and title is not None:
                 post.title = title
+            
+            if hasattr(post, content):
+                post.content = content
+            
+            if hasattr(post, choices):
+                post.choices = choices
 
             post.save()
             return post
 
     
-    class QuestionAndAnswerManager(Base, Manager_):
-        def create_question_and_answer_post(self: models.QuerySet["QuestionAndAnswer"], Base) -> "QuestionAndAnswer":
-            question_and_answer =  Base.create_post(title=self.title, content=self.content, choices=self.choices)
-            question_and_answer.save(using=self._db)
+    class QuestionAndAnswerManager(Base, Manager_["PostsManager"]):
+        def create_question_and_answer_post(self) -> models.QuerySet["QuestionAndAnswer"]:
+            return PostsManager.QuestionAndAnswerManager(self.model, using=self._db)
 
-            return question_and_answer
-        def update_question_and_answer_post(self: models.QuerySet['QuestionAndAnswer'], post_id, content, title, choices) -> "QuestionAndAnswer":
-            question_and_answer = self.get(id=post_id)
-            if content:
-                question_and_answer.content = content
-            if title:
-                question_and_answer.title = title
-            if choices:
-                question_and_answer.choices = choices
+        def update_question_and_answer_post(self) -> "QuestionAndAnswer":
+            return PostsManager.QuestionAndAnswerManager(self.update_post(title=self.title, content=self.content, choices=self.choices), using=self._db)
             
-            question_and_answer.save(using=self.db)
-            return question_and_answer
 
-    class IdeaThreadManager(Base, Manager_):
-        def create_idea_thread_post(self: models.QuerySet["IdeaThread"], content) -> "IdeaThread":
-            idea_thread = self.model(content=content)
-            idea_thread.save(using=self._db)
-
-            return idea_thread
-
-        def update_idea_thread_post(self: models.QuerySet['QuestionAndAnswer'], post_id, content) -> "QuestionAndAnswer":
-            question_and_answer = self.get(id=post_id)
-            if content:
-                question_and_answer.content = content
-            
-            question_and_answer.save(using=self.db)
-            return question_and_answer
+    class IdeaThreadManager(Base, Manager_["PostsManager"]):
+        def create_idea_thread_post(self) -> models.QuerySet["IdeaThread"]:
+            return PostsManager.IdeaThreadManager(self.model, using=self._db)
         
+        def update_idea_thread_post(self) -> "IdeaThread":
+            return PostsManager.IdeaThreadManager(self.update_post(content=self.content), using=self._db)
 
-    class LongDraftManager(Base, Manager_):
-        def create_long_draft_post(self: models.QuerySet["LongDraft"], content) -> "LongDraft":
-            long_draft = self.model(content=content)
-            long_draft.save(using=self._db)
 
-            return long_draft
+    class LongDraftManager(Base, Manager_["PostsManager"]):
+        def create_long_draft_post(self) -> models.QuerySet['LongDraft']:
+            return PostsManager.LongDraftManager(self.model, using=self._db)
+         
+        def update_long_draft_post(self) -> "LongDraft":
+            return PostsManager.LongDraftManager(self.update_post(title=self.title, content=self.content), using=self._db)
