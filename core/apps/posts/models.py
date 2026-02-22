@@ -1,10 +1,12 @@
-from typing import Self
+from typing import Self, ClassVar
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from django.contrib.postgres.fields import ArrayField
 from core.utils.models import UIDTimeBasedModel
+
+from .managers import PostsManager
 
 class Bookmark(UIDTimeBasedModel):
     """
@@ -29,6 +31,7 @@ class BaseContent(UIDTimeBasedModel):
     community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="content_community")
     project = models.ForeignKey("users.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="content_project")
     parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", blank=True, null=True)
+    
 
     class Meta:
         abstract = True
@@ -55,6 +58,10 @@ class QuestionAndAnswer(BaseContent):
     downvotes = models.IntegerField(default=0)
     most_helpful = models.ForeignKey("self", on_delete=models.SET_NULL, related_name="most_helpful_reply", blank=True, null=True)
 
+    objects = ClassVar[PostsManager.QuestionAndAnswerManager]
+
+post = QuestionAndAnswer.objects.create_question_and_answer_post(content="da, da, da", title="This is a question", choices=["Choice 1", "Choice 2", "Choice 3"])
+
 
 class IdeaThread(BaseContent):
     """
@@ -63,9 +70,12 @@ class IdeaThread(BaseContent):
         As a basic-tier user, I want to share creative ideas even if I must break them
         into multiple posts.
     """
+    
     content = models.CharField(max_length=250)
     original = models.BooleanField(default=False)  # True if this is the original post, False if it's a reply
     likes = models.IntegerField(default=0)
+    objects = ClassVar[PostsManager.IdeaThreadManager]
+
 
 
 class LongDraft(BaseContent):
@@ -77,4 +87,5 @@ class LongDraft(BaseContent):
     title = models.CharField(max_length=255)
     content = models.TextField()
     likes = models.IntegerField(default=0)
+    objects = ClassVar[PostsManager.LongDraftManager]
 
