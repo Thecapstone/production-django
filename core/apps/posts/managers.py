@@ -44,7 +44,7 @@ class LongDraftPostType(PostExtrasType):
 class PostsManager:
 
     class Base:
-        def create_post(self: models.QuerySet["IdeaThread" | "QuestionAndAnswer" | "LongDraft"], data: [QuestionAndAnswerPostType | IdeaThreadPostType | LongDraftPostType] **kwargs) -> "IdeaThread| LongDraft| QuestionAndAnswer":
+        def create_post(self: models.QuerySet["IdeaThread" | "QuestionAndAnswer" | "LongDraft"], data: QuestionAndAnswerPostType | IdeaThreadPostType | LongDraftPostType, **kwargs) -> IdeaThread| LongDraft| QuestionAndAnswer:
 
             post_type = self.__class__.__name__ # IdeaThread or QuestionAndAnswer or LongDraft
             base_data = BasePostType(**{k: v for k, v in data.items() if k in BasePostType.__annotations__}).__dict__
@@ -61,12 +61,36 @@ class PostsManager:
                     raise Exception("Invalid post type")
 
             return post.save()
+        
+        def update_post(self, post_id, user_id, title: str | None = None) -> IdeaThread| LongDraft| QuestionAndAnswer:
+            post = self.get(id=post_id)
 
+            if post.user_id != user_id:
+                raise Exception("You cannot edit a post that you did not create")
+            
+            if hasattr(post, "title") and title is not None:
+                post.title = title
+
+            post.save()
+            return post
+
+    
     class QuestionAndAnswerManager(Base, Manager_):
-        def create_q_and_a_post(self: models.QuerySet["QuestionAndAnswer"], content, choices) -> "QuestionAndAnswer":
-            question_and_answer =  self.model(content=content, choices=choices)
+        def create_question_and_answer_post(self: models.QuerySet["QuestionAndAnswer"], Base) -> "QuestionAndAnswer":
+            question_and_answer =  Base.create_post(title=self.title, content=self.content, choices=self.choices)
             question_and_answer.save(using=self._db)
 
+            return question_and_answer
+        def update_question_and_answer_post(self: models.QuerySet['QuestionAndAnswer'], post_id, content, title, choices) -> "QuestionAndAnswer":
+            question_and_answer = self.get(id=post_id)
+            if content:
+                question_and_answer.content = content
+            if title:
+                question_and_answer.title = title
+            if choices:
+                question_and_answer.choices = choices
+            
+            question_and_answer.save(using=self.db)
             return question_and_answer
 
     class IdeaThreadManager(Base, Manager_):
@@ -76,10 +100,18 @@ class PostsManager:
 
             return idea_thread
 
+        def update_idea_thread_post(self: models.QuerySet['QuestionAndAnswer'], post_id, content) -> "QuestionAndAnswer":
+            question_and_answer = self.get(id=post_id)
+            if content:
+                question_and_answer.content = content
+            
+            question_and_answer.save(using=self.db)
+            return question_and_answer
+        
+
     class LongDraftManager(Base, Manager_):
         def create_long_draft_post(self: models.QuerySet["LongDraft"], content) -> "LongDraft":
             long_draft = self.model(content=content)
             long_draft.save(using=self._db)
 
             return long_draft
-
