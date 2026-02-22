@@ -20,10 +20,6 @@ class ProjectManager:
             project.moderators.set(project.creator)
             return project
 
-        def set_creator_as_super_moderator(self: models.QuerySet["Project"], project: "Project") -> "Project":
-            """Set the creator as a super moderator of the project."""
-            project.moderators.add(project.creator)
-            project.save(using=self._db)
 
         def update_project(self: models.QuerySet["Project"], project: "Project", title: str | None=None, about: str | None=None, rules: str | None=None) -> "Project":
             """updates a project title, rules, or about fields with new information."""
