@@ -10,6 +10,8 @@ WORKDIR ${APP_HOME}
 
 # we need to move the virtualenv outside of the $APP_HOME directory because it will be overriden by the docker compose mount
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=0
+ENV UV_HTTP_TIMEOUT=300
+ENV UV_HTTP_RETRIES=10
 
 # Install apt packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -24,7 +26,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     --mount=type=bind,source=uv.lock,target=uv.lock:rw \
-    uv sync --no-install-project
+    uv sync --no-install-project --no-dev
 
 COPY . ${APP_HOME}
 
