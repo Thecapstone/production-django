@@ -60,8 +60,6 @@ class QuestionAndAnswer(BaseContent):
 
     objects = ClassVar[PostsManager.QuestionAndAnswerManager]
 
-post = QuestionAndAnswer.objects.create_question_and_answer_post(content="da, da, da", title="This is a question", choices=["Choice 1", "Choice 2", "Choice 3"])
-
 
 class IdeaThread(BaseContent):
     """
