@@ -4,11 +4,13 @@
 
 from pathlib import Path
 
-from os import environ
+import environ
+import os
+
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # cookiecutter_django/
-APPS_DIR = BASE_DIR / "cookiecutter_django"
+APPS_DIR = BASE_DIR / "core"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
