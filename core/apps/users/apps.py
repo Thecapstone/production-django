@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UsersConfig(AppConfig):
-    name = "cookiecutter_django.users"
+    name = "core.apps.users"
     verbose_name = _("Users")
 
     def ready(self):

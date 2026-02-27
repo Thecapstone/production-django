@@ -1,6 +1,6 @@
 
 from typing import ClassVar, Self
-from typing import TYPECHECKING
+from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -13,7 +13,7 @@ from core.utils.models import UIDTimeBasedModel
 from .managers import CommunityManager, UserManager
 
 
-if TYPECHECKING:
+if TYPE_CHECKING:
     from core.apps.posts.models import Bookmark
     from core.apps.posts.models import QuestionAndAnswer
     from core.apps.posts.models import IdeaThread
@@ -34,11 +34,10 @@ class User(AbstractUser):
     last_name = None  # type: ignore[assignment]
     email = models.EmailField(_("email address"), unique=True)
     username = None  # type: ignore[assignment]
-    bookmarks: models.QuerySet[Bookmark]
-    surveys: models.QuerySet[QuestionAndAnswer]
-    ideas: models.QuerySet[IdeaThread]
-    articles: models.QuerySet[LongDraft]
-
+    bookmarks: models.QuerySet[Bookmark] # noqa 
+    surveys: models.QuerySet[QuestionAndAnswer] # type: ignore[assignment]
+    ideas: models.QuerySet[IdeaThread] # type: ignore[assignment]
+    articles: models.QuerySet[LongDraft] # type: ignore[assignment]
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
