@@ -1,22 +1,22 @@
 from rest_framework import serializers
 from .models import Project
 
-class ProjectSerializer(serializers.ModelSerializer):
+from core.apps.users.models.User import User
+from core.utils.enums import ModeratorRoles
 
-    class Meta:
-        model = Project
-        fields = ['title', 'about', 'rules', "start_date", "end_date", 'moderators']
 
-    def create(self, validated_data):
-        return Project.objects.create(**validated_data)
+class ProjectSerializer:
+    class CreateProject(serializers.ModelSerializer):
+        title = serializers.SerializerMethodField()
+        moderators = serializers.ChoiceField(choices=ModeratorRoles.choices, required=False, default=Project.creator)
+        creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all)
+
+        def get_title(self, obj):
+            return (f"{obj.title} project by {obj.creator}")
+        
+        class Meta:
+            model = Project
+            fields = ["title", "creator", "about", "rules"]
     
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.about = validated_data.get('about', instance.about)
-        instance.rules = validated_data.get('rules', instance.rules)
-        instance.save()
-        return instance
-    
-    def creator_as_moderator(self, instance):
-        instance.moderators.set(instance.creator)
-        return instance
+    class UpdateProject(serializers.ModelSerializer):
+        ...
