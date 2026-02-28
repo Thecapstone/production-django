@@ -18,5 +18,9 @@ class ProjectSerializer:
             model = Project
             fields = ["title", "creator", "about", "rules"]
     
-    class UpdateProject(serializers.ModelSerializer):
-        ...
+    def validate_project_name(serializers.Serializer):
+        """
+        ensure that a user cannot create a project with the same name as an existing project.
+        """
+        if Project.objects.filter(title__iexact=serializers.validated_data["title"]).exists():
+            raise serializers.ValidationError("A project with this name already exists.")
