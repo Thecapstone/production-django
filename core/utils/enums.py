@@ -3,7 +3,7 @@ from typing import TypedDict
 from django.db.models import TextChoices
 
 
-class ModeratorRoles(TextChoices):
+class ModeratorRolesEnums(TextChoices):
     SUPER = ("super", "super")
     COMPLIANCE = ("compliance", "compliance")
     CONTENT = ("content", "content")

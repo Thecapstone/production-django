@@ -7,7 +7,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from core.utils.enums import CommentReportReason, CommunityReportReason, ModeratorRoles
+from core.utils.enums import CommentReportReason, CommunityReportReason, ModeratorRolesEnums
 from core.utils.models import UIDTimeBasedModel
 
 from .managers import CommunityManager, UserManager
@@ -54,7 +54,7 @@ class User(AbstractUser):
 
 
 class ModeratorPermission(UIDTimeBasedModel):
-    role = models.CharField(_("Tag of Permission"), choices=ModeratorRoles.choices, blank=False, max_length=255, unique=True)
+    role = models.CharField(_("Tag of Permission"), choices=ModeratorRolesEnums.choices, blank=False, max_length=255, unique=True)
     name = models.CharField(_("Name of Permission"), blank=False, max_length=255)
     emoji = models.CharField(_("Emoji for Permission"), blank=True, max_length=10)
 
@@ -75,7 +75,7 @@ class Community(UIDTimeBasedModel):
     description = models.TextField(_("Description of Community"), blank=True)
     rules = models.TextField(_("Rules of Community"), blank=True)
     emoji = models.CharField(_("Emoji for Community"), blank=True, max_length=10)
-    project_container = models.ForeignKey("users.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="project_container")
+    project_container = models.ForeignKey("users.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="project_communities")
 
     def __str__(self) -> str:
         return self.name
