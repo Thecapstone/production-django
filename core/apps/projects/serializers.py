@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Project
 
 from core.apps.users.models.User import User
-from core.utils.enums import ModeratorRoles
+from core.utils.enums import ModeratorRolesEnums
 
 
 class ProjectSerializer:
@@ -19,19 +19,31 @@ class ProjectSerializer:
             """
             if Project.objects.filter(title__iexact=title).exists():
                 raise serializers.ValidationError("A project with this name already exists.")
+            return title
             
-    class ProjectList(serializers.ModelSerializer):
+
+    class ProjectDetail(serializers.ModelSerializer):
         detail = serializers.SerializerMethodField()
+        communities = Project.objects.prefetch_related('project_communities')
+        posts = Project.objects.prefetch_related('project_posts')
 
         def get_detail(self, obj):
             return (f"{obj.title} project by {obj.creator}")
-        
+    
         class Meta:
             model = Project
-            fields = ('__all__', 'detail')
+            fields = ('about','moderators', 'detail', 'communities', 'posts')
+
+    
+    class ProjectList(serializers.ModelSerializer):
+        class Meta:
+            model = Project
+            exclude = ['about', 'members', 'rules']
 
         
     class ProjectUpdateSerializer(serializers.ModelSerilizers):
-        model = Project
-        fields = ('title', "about", "rules")
+        class Meta:
+            model = Project
+            fields = ('title', "about", "rules")
+
 
