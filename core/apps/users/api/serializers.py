@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from core.apps.posts.models import QuestionAndAnswer
-from core.users.models import User
+from core.apps.users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer[User]):

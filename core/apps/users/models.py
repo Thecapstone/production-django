@@ -7,21 +7,18 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from core.utils.enums import CommentReportReason, CommunityReportReason, ModeratorRolesEnums
-from core.utils.models import UIDTimeBasedModel
+from core.helpers.enums import CommentReportReason, CommunityReportReason, ModeratorRolesEnums
+from core.helpers.models import UIDTimeBasedModel
 
 from .managers import CommunityManager, UserManager
+    
+    
 
-
-if TYPE_CHECKING:
+class User(AbstractUser):
     from core.apps.posts.models import Bookmark
     from core.apps.posts.models import QuestionAndAnswer
     from core.apps.posts.models import IdeaThread
     from core.apps.posts.models import LongDraft
-
-
-
-class User(AbstractUser):
     """
     Default custom user model for cookiecutter-django.
     If adding fields that need to be filled at user signup,
@@ -34,8 +31,8 @@ class User(AbstractUser):
     last_name = None  # type: ignore[assignment]
     email = models.EmailField(_("email address"), unique=True)
     username = None  # type: ignore[assignment]
-    bookmarks: models.QuerySet[Bookmark] # noqa 
     surveys: models.QuerySet[QuestionAndAnswer] # type: ignore[assignment]
+    bookmarks: models.QuerySet[Bookmark] # noqa 
     ideas: models.QuerySet[IdeaThread] # type: ignore[assignment]
     articles: models.QuerySet[LongDraft] # type: ignore[assignment]
     USERNAME_FIELD = "email"
@@ -75,7 +72,7 @@ class Community(UIDTimeBasedModel):
     description = models.TextField(_("Description of Community"), blank=True)
     rules = models.TextField(_("Rules of Community"), blank=True)
     emoji = models.CharField(_("Emoji for Community"), blank=True, max_length=10)
-    project_container = models.ForeignKey("users.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="project_communities")
+    project_container = models.ForeignKey("projects.Project", on_delete=models.SET_NULL, null=True, blank=True, related_name="project_communities")
 
     def __str__(self) -> str:
         return self.name

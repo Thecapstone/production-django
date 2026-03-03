@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, ClassVar
 from django.db.models import Manager as Manager_
 from django.db import models
+from django.db.models import QuerySet
 
 
 if TYPE_CHECKING:
@@ -36,7 +37,7 @@ class ProjectManager:
             project.save(using=self._db)
             return project
         
-        def starts_with_x(self: models.QuerySet["Project"], x: str) -> models.Queryset["Project"]:
+        def starts_with_x(self: models.QuerySet["Project"], x: str) -> models.QuerySet["Project"]:
             """Return all projects that start with the given string."""
             return self.filter(title__startswith=x)
         
@@ -49,6 +50,9 @@ class ProjectManager:
             project.delete()
 
     class Manager(Base, Manager_["Project"]):
-        def get_queryset(self) -> models.QuerySet["Project"]:
-            return ProjectManager.Manager(self.model, using=self._db)
+        def get_queryset(self) -> QuerySet:
+            return ProjectManager.QuerySet_(self.model, using=self._db)
+
+    class QuerySet_(Base, QuerySet):
+        ...
         

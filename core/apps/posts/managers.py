@@ -1,12 +1,14 @@
-from typing import TYPE_CHECKING, TypedDict
+from __future__ import annotations
+from typing import TYPE_CHECKING, Union
 from dataclasses import dataclass
 from django.db import models
 from django.db.models import Manager as Manager_
-from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
+
 
 from core.apps.projects.models import Project
 
-
+#if not settings.DEBUG:
 if TYPE_CHECKING:
     from core.apps.users.models import Community  # noqa: TC004
     from core.apps.users.models import User  # noqa: TC004
@@ -17,11 +19,12 @@ if TYPE_CHECKING:
     from core.apps.projects.models import Project
 
 
+
 @dataclass
 class BasePostType:
-    user: User
-    community: Community
-    project: Project
+    user: str
+    community: str
+    project: str
     content: str
 
 @dataclass
@@ -44,7 +47,19 @@ class LongDraftPostType(PostExtrasType):
 class PostsManager:
 
     class Base:
-        def create_post(self: models.QuerySet["IdeaThread" | "QuestionAndAnswer" | "LongDraft"], data: QuestionAndAnswerPostType | IdeaThreadPostType | LongDraftPostType, **kwargs) -> IdeaThread| LongDraft| QuestionAndAnswer:
+        def create_post(self: 
+            Union[
+            models.QuerySet[ "QuestionAndAnswer"] | 
+            models.QuerySet[ "IdeaThread"] | 
+            models.QuerySet[ "LongDraft"]
+            ],
+            data: Union[
+                QuestionAndAnswerPostType | 
+                IdeaThreadPostType | 
+                LongDraftPostType
+            ], 
+            **kwargs
+        ) -> Union["QuestionAndAnswer" | "IdeaThread" | "LongDraft"]:
             """ Creates a new post (QuestionAndAnswer, IdeaThread, or LongDraft) based on the post type."""
 
             post_type = self.__class__.__name__ # IdeaThread or QuestionAndAnswer or LongDraft

@@ -4,7 +4,7 @@ import random
 from django.utils.timezone import now, timedelta
 from faker import Faker
 
-from core.utils.utils import to_snake_case
+from core.helpers.utils import to_snake_case
 
 try:
     # If requests >=1.0 is available, we will use it

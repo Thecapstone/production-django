@@ -2,11 +2,13 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
 
-from core.users.api.views import UserViewSet
+from core.apps.users.api.views import UserViewSet
+from core.apps.projects.views import ProjectViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register("projects", ProjectViewSet)
 
 
 app_name = "api"

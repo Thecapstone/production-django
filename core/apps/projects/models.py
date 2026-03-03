@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, ClassVar
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from core.utils.models import UIDTimeBasedModel
-from core.utils.enums import ModeratorRolesEnums
+from core.helpers.models import UIDTimeBasedModel
+from core.helpers.enums import ModeratorRolesEnums
 from .managers import ProjectManager
 
 

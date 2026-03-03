@@ -3,8 +3,8 @@ from typing import Any, Dict, List, Literal, Optional, Union, Iterator
 
 from pydantic import AliasChoices, Field, ValidationError
 
-from core.utils.interface import BaseModel
-from core.utils.generators import generate_example
+from core.helpers.interface import BaseModel
+from core.helpers.generators import generate_example
 
 
 def is_recursion_validation_error(exc: ValidationError) -> bool:

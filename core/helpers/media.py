@@ -14,8 +14,8 @@ from django.utils import timezone
 from django.utils.timezone import now
 from PIL import Image
 
-from core.utils.custom_exceptions import CustomError
-from core.utils.validators import (
+from core.helpers.custom_exceptions import CustomError
+from core.helpers.validators import (
     _VALID_AUDIO_EXTENSIONS,
     _VALID_IMAGE_EXTENSIONS,
     _VALID_VIDEO_EXTENSIONS,

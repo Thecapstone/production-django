@@ -25,8 +25,8 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.serializers import JSONField, ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from core.utils.custom_exceptions import CustomError
-from core.utils.interface import BaseTypeModel
+from core.helpers.custom_exceptions import CustomError
+from core.helpers.interface import BaseTypeModel
 
 
 def is_setting_config(settings: Literal["local", "production", "test"]) -> bool:

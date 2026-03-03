@@ -2,9 +2,10 @@ from typing import Self, ClassVar
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+import auto_prefetch
 
 from django.contrib.postgres.fields import ArrayField
-from core.utils.models import UIDTimeBasedModel
+from core.helpers.models import UIDTimeBasedModel
 
 from .managers import PostsManager
 
@@ -14,26 +15,22 @@ class Bookmark(UIDTimeBasedModel):
     """
 
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks")
-
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.CharField()
     content_object = GenericForeignKey("content_type", "object_id")
 
-    class Meta:
-        unique_together = ("users", "content_type", "object_id")
+    class Meta(auto_prefetch.Model.Meta):
+        unique_together = ("user", "content_type", "object_id")
 
 
 class BaseContent(UIDTimeBasedModel):
     """
     Base model for content containing all common post fields
     """
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="published_by")
-    community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="content_community")
-    project = models.ForeignKey("users.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="content_project")
     parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", blank=True, null=True)
     
 
-    class Meta:
+    class Meta(auto_prefetch.Model.Meta):
         abstract = True
 
     @property
@@ -55,6 +52,10 @@ class QuestionAndAnswer(BaseContent):
     choices = ArrayField(models.CharField(max_length=255), null=True, blank=True)  # List of choices for the question
     """["Choice 1", "Choice 2", "Choice 3"]"""
     upvotes = models.IntegerField(default=0)
+    community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="question_and_answer")
+    project = models.ForeignKey("projects.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="question_and_answer")
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="question_and_answer_user")
+
     downvotes = models.IntegerField(default=0)
     most_helpful = models.ForeignKey("self", on_delete=models.SET_NULL, related_name="most_helpful_reply", blank=True, null=True)
 
@@ -72,6 +73,10 @@ class IdeaThread(BaseContent):
     content = models.CharField(max_length=250)
     original = models.BooleanField(default=False)  # True if this is the original post, False if it's a reply
     likes = models.IntegerField(default=0)
+    community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="idea_threads")
+    project = models.ForeignKey("projects.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="idea_threads")
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="idea_threads_user")
+
     objects = ClassVar[PostsManager.IdeaThreadManager]
 
 
@@ -85,5 +90,8 @@ class LongDraft(BaseContent):
     title = models.CharField(max_length=255)
     content = models.TextField()
     likes = models.IntegerField(default=0)
+    community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="long_drafts")
+    project = models.ForeignKey("projects.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="long_drafts")
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="long_drafts_user")
     objects = ClassVar[PostsManager.LongDraftManager]
 

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import Project
 
-from core.apps.users.models.User import User
-from core.utils.enums import ModeratorRolesEnums
+from core.apps.users.models import User
+from core.helpers.enums import ModeratorRolesEnums
 
 
 class ProjectSerializer:
@@ -41,9 +41,7 @@ class ProjectSerializer:
             exclude = ['about', 'members', 'rules']
 
         
-    class ProjectUpdateSerializer(serializers.ModelSerilizers):
+    class ProjectUpdateSerializer(serializers.ModelSerializer):
         class Meta:
             model = Project
             fields = ('title', "about", "rules")
-
-

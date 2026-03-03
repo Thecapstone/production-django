@@ -1,6 +1,6 @@
 import os
 
-from core.utils.custom_exceptions import CustomError
+from core.helpers.custom_exceptions import CustomError
 
 _VALID_FILE_EXTENSIONS = [
     ".doc",
