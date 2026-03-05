@@ -28,7 +28,6 @@ class BaseContent(UIDTimeBasedModel):
     Base model for content containing all common post fields
     """
     parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="replies", blank=True, null=True)
-    
 
     class Meta(auto_prefetch.Model.Meta):
         abstract = True

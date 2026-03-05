@@ -24,8 +24,8 @@ class ProjectSerializer:
 
     class ProjectDetail(serializers.ModelSerializer):
         detail = serializers.SerializerMethodField()
-        communities = Project.objects.prefetch_related('project_communities')
-        posts = Project.objects.prefetch_related('project_posts')
+        communities = Project.objects.prefetch_related('questions_and_answers', 'idea_threads', 'long_drafts')
+        posts = Project.objects.prefetch_related('questions_and_answers', 'idea_threads', 'long_drafts')
 
         def get_detail(self, obj):
             return (f"{obj.title} project by {obj.creator}")

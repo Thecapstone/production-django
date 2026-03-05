@@ -30,7 +30,7 @@ urlpatterns = [
 urlpatterns += [
     # API base url
     path("api/", include("config.api_router")),
-    path("api/", include("core.apps.projects.routers", namespace="projects")),
+    path("api/", include("core.apps.projects.urls", namespace="projects")),
     # DRF auth token
     path('api-auth/', include('rest_framework.urls')),
     path("api/auth-token/", obtain_auth_token, name="obtain_auth_token"),
