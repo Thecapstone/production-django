@@ -5,7 +5,6 @@ from core.apps.projects.views import ProjectViewSet
 
 PREFIX = 'projects'
 
-
 router = DefaultRouter()
 router.register('projects', ProjectViewSet, basename='projects')
 urlpatterns = router.urls

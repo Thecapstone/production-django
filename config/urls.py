@@ -18,10 +18,8 @@ urlpatterns = [
     ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    # User management
     path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
-    # ...
+    path("projects/", include("core.apps.projects.urls")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
@@ -30,7 +28,7 @@ urlpatterns = [
 urlpatterns += [
     # API base url
     path("api/", include("config.api_router")),
-    path("api/", include("core.apps.projects.urls", namespace="projects")),
+    #path("api/", include("core.apps.projects.urls", namespace="projects")),
     # DRF auth token
     path('api-auth/', include('rest_framework.urls')),
     path("api/auth-token/", obtain_auth_token, name="obtain_auth_token"),
