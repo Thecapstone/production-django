@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING, ClassVar
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from core.helpers.models import UIDTimeBasedModel
 from core.helpers.enums import ModeratorRolesEnums
+from core.helpers.enums import TimerStatus
 from .managers import ProjectManager
 
 
@@ -19,6 +21,9 @@ class Project(UIDTimeBasedModel):
     members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
     rules = models.TextField(_("Project Rules"), blank=True)
     objects: ClassVar[ProjectManager.Manager] = ProjectManager.Manager()
+    start_project = models.DateTimeField()
+    end_project = models.DateTimeField()
+    extend_project = models.DateTimeField(null=True, blank=True)
 
     @property
     def about(self) -> str:
@@ -41,6 +46,11 @@ class Project(UIDTimeBasedModel):
         """Remove moderators from the project."""
         self.moderators.remove(*moderators)
 
+    @property
+    def project_duration(self):
+        duration = self.end_project - self.start_project
+        return duration
+    
     def __str__(self):
         return self.title
-
+    
