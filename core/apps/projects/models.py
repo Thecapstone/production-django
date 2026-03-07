@@ -22,8 +22,7 @@ class Project(UIDTimeBasedModel):
     rules = models.TextField(_("Project Rules"), blank=True)
     objects: ClassVar[ProjectManager.Manager] = ProjectManager.Manager()
     start_project = models.DateTimeField()
-    end_project = models.DateTimeField()
-    extend_project = models.DateTimeField(null=True, blank=True)
+    
 
     @property
     def about(self) -> str:
@@ -46,10 +45,6 @@ class Project(UIDTimeBasedModel):
         """Remove moderators from the project."""
         self.moderators.remove(*moderators)
 
-    @property
-    def project_duration(self):
-        duration = self.end_project - self.start_project
-        return duration
     
     def __str__(self):
         return self.title
