@@ -24,3 +24,10 @@ class CommunityReportReason(TextChoices):
     ILLEGAL_ACTIVITIES = ("illegal_activities", "illegal_activities")
     INAPPROPRIATE_CONTENT = ("inappropriate_content", "inappropriate_content")
     OTHER = ("other", "other")
+
+class TimerStatus(TextChoices):
+    RUNNING = ("running", "running")
+    COMPLETED = ("completed", "completed")
+    HALFWAY = ("halfway", "halfway")
+    EXTENDED = ("extended", "extended")
+    ABORTED = ("aborted", "aborted")
