@@ -14,13 +14,22 @@ class Bookmark(UIDTimeBasedModel):
     Users can bookmark any content (questions, idea threads, or long drafts) for easy access later.
     """
 
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks")
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks") #many-to-one
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) #one-to-one
     object_id = models.CharField()
     content_object = GenericForeignKey("content_type", "object_id")
 
     class Meta(auto_prefetch.Model.Meta):
         unique_together = ("user", "content_type", "object_id")
+
+class PostTags(UIDTimeBasedModel):
+    """
+    Users can create tags for their posts, structuring how they are found or filtered.
+    """
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks") #many-to-one
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) #many-to-one
+    object_id = models.CharField()
+    content_object = GenericForeignKey("content_type", "object_id")
 
 
 class BaseContent(UIDTimeBasedModel):
@@ -51,10 +60,10 @@ class QuestionAndAnswer(BaseContent):
     choices = ArrayField(models.CharField(max_length=255), null=True, blank=True)  # List of choices for the question
     """["Choice 1", "Choice 2", "Choice 3"]"""
     upvotes = models.IntegerField(default=0)
-    community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="question_and_answer")
-    project = models.ForeignKey("projects.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="question_and_answer")
+    community = models.ForeignKey("users.Community", on_delete=models.SET_NULL, null=True, blank=True, related_name="question_and_answer") #many-to-one
+    project = models.ForeignKey("projects.Project", blank=True, null=True, on_delete=models.SET_NULL, related_name="question_and_answer") # many-to-one
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="question_and_answer_user")
-
+    
     downvotes = models.IntegerField(default=0)
     most_helpful = models.ForeignKey("self", on_delete=models.SET_NULL, related_name="most_helpful_reply", blank=True, null=True)
 
