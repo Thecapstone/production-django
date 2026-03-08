@@ -11,12 +11,12 @@ class ProjectSerializer:
     class CreateProject(serializers.ModelSerializer):
         creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all)
         end_project = serializers.DateTimeField()
-        extend_project = serializers.DateTimeField(null=True, blank=True)
+        start_project = serializers.DateTimeField()
 
 
         class Meta:
             model = Project
-            fields = ["title", "creator","start_project","end_project","about", "rules"]
+            fields = ["title", "creator","start_project","end_project","description", "rules"]
     
         def validate_project_title(self, title):
             """
@@ -63,6 +63,7 @@ class ProjectSerializer:
 
         
     class ProjectUpdateSerializer(serializers.ModelSerializer):
+        extend_project = serializers.DateTimeField()
         class Meta:
             model = Project
             fields = ('title', "about","extend_project", "rules")
