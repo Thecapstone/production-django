@@ -10,8 +10,9 @@ from core.helpers.enums import ModeratorRolesEnums
 class ProjectSerializer:
     class CreateProject(serializers.ModelSerializer):
         creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all)
+        start_project = serializers.DateTimeField(default=timezone.now)
         end_project = serializers.DateTimeField()
-        start_project = serializers.DateTimeField()
+        
 
 
         class Meta:
