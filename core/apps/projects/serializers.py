@@ -1,6 +1,8 @@
 from django.utils import timezone
 from requests import Response
 from rest_framework import serializers
+
+from core.apps.posts import models
 from .models import Project
 
 from core.apps.users.models import User
@@ -10,10 +12,7 @@ from core.helpers.enums import ModeratorRolesEnums
 class ProjectSerializer:
     class CreateProject(serializers.ModelSerializer):
         creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all)
-        start_project = serializers.DateTimeField(default=timezone.now)
-        end_project = serializers.DateTimeField()
-        
-
+        project_duration = serializers.SerializerMethodField()
 
         class Meta:
             model = Project
@@ -28,19 +27,20 @@ class ProjectSerializer:
             return title
     
         def start_timer(self):
-            while self.end_project != timezone.now():
-                time_left = self.end_project - timezone.now() 
+            while Project.end_project != timezone.now():
+                time_left = Project.end_project - timezone.now() 
                 return time_left
-            return Response (self.serializer_class("Project duration has ended."), status=204)
+            raise serializers.ValidationError("Project duration has ended.")
     
-        def extend_timer(self):
-            if self.start_timer and User == self.creator:
-                self.end_project== self.extend_project
-                return Response(self.serializer_class("Project duration has been extended"), status=204)
-        
-        def project_duration(self):
+        def get_project_duration(self):
             duration = self.end_project - self.start_project
             return duration
+
+        def validate_end_project(self, end_project):
+            if end_project <= timezone.now():
+                raise serializers.ValidationError("End project time must be in the future.")
+            return end_project
+        
 
             
 
@@ -65,6 +65,13 @@ class ProjectSerializer:
         
     class ProjectUpdateSerializer(serializers.ModelSerializer):
         extend_project = serializers.DateTimeField()
+
+        def extend_timer(self):
+            if Project.start_timer and User == Project.creator:
+                Project.end_project== Project.extend_project
+                return Response(self.serializer_class("Project duration has been extended"), status=204)
+            raise serializers.ValidationError("Only the project creator can extend the project duration.")
+        
         class Meta:
             model = Project
             fields = ('title', "about","extend_project", "rules")

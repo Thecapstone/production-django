@@ -7,7 +7,7 @@ from core.apps.projects.views import ProjectViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
-router.register("users", UserViewSet)
+#router.register("users", UserViewSet)
 router.register("projects", ProjectViewSet)
 
 

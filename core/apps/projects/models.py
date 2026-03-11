@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, ClassVar
+from django.utils import timezone
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -19,6 +20,8 @@ class Project(UIDTimeBasedModel):
     moderators: models.QuerySet["Moderator"] = models.ForeignKey("users.Moderator", on_delete=models.CASCADE, choices=ModeratorRolesEnums.choices, related_name="project_managers", blank=True)
     members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
     rules = models.TextField(_("Project Rules"), blank=True)
+    start_project = models.DateTimeField(default=timezone.now)
+    end_project = models.DateTimeField()
     objects: ClassVar[ProjectManager.Manager] = ProjectManager.Manager()
     
     
