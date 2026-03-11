@@ -26,7 +26,7 @@ class PostTags(UIDTimeBasedModel):
     """
     Users can create tags for their posts, structuring how they are found or filtered.
     """
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="bookmarks") #many-to-one
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="post_tags") #many-to-one
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) #many-to-one
     object_id = models.CharField()
     content_object = GenericForeignKey("content_type", "object_id")
