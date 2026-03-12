@@ -11,7 +11,7 @@ from core.helpers.enums import ModeratorRolesEnums
 
 class ProjectSerializer:
     class CreateProject(serializers.ModelSerializer):
-        creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all)
+        creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
         project_duration = serializers.SerializerMethodField()
 
         class Meta:
@@ -32,8 +32,8 @@ class ProjectSerializer:
                 return time_left
             raise serializers.ValidationError("Project duration has ended.")
     
-        def get_project_duration(self):
-            duration = self.end_project - self.start_project
+        def get_project_duration(self, obj):
+            duration = obj.end_project - obj.start_project
             return duration
 
         def validate_end_project(self, end_project):

@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, ClassVar
 from django.db.models import Manager as Manager_
 from django.db import models
 from django.db.models import QuerySet
+from django.utils import timezone
 
 
 if TYPE_CHECKING:
@@ -13,9 +14,9 @@ if TYPE_CHECKING:
 class ProjectManager:
 
     class Base:
-        def open_project(self: models.QuerySet["Project"], title: str, creator:"User", about: str) -> "Project":
+        def open_project(self: models.QuerySet["Project"], title: str, creator:"User", description: str, start_project: timezone.datetime, end_project: timezone.datetime, rules: str) -> "Project":
             """ Creates a new project with the given title, creator, about, and moderators."""
-            project: "Project" = self.model(title=title, creator=creator, about=about)
+            project: "Project" = self.model(title=title, creator=creator, description=description, start_project=start_project, end_project=end_project, rules=rules)
 
             project.save(using=self._db)
             project.moderators.set(project.creator)
