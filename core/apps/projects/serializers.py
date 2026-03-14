@@ -12,7 +12,6 @@ from core.helpers.enums import ModeratorRolesEnums
 class ProjectSerializer:
     class CreateProject(serializers.ModelSerializer):
         creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-        project_duration = serializers.SerializerMethodField()
 
         class Meta:
             model = Project
@@ -26,12 +25,6 @@ class ProjectSerializer:
                 raise serializers.ValidationError("A project with this name already exists.")
             return title
     
-        def start_timer(self):
-            while Project.end_project != timezone.now():
-                time_left = Project.end_project - timezone.now() 
-                return time_left
-            raise serializers.ValidationError("Project duration has ended.")
-    
         def get_project_duration(self, obj):
             duration = obj.end_project - obj.start_project
             return duration
@@ -40,37 +33,38 @@ class ProjectSerializer:
             if end_project <= timezone.now():
                 raise serializers.ValidationError("End project time must be in the future.")
             return end_project
-        
-
             
 
     class ProjectDetail(serializers.ModelSerializer):
         detail = serializers.SerializerMethodField()
-        communities = Project.objects.prefetch_related('questions_and_answers', 'idea_threads', 'long_drafts')
-        posts = Project.objects.prefetch_related('questions_and_answers', 'idea_threads', 'long_drafts')
+        about = serializers.SerializerMethodField()
+        project_duration = serializers.SerializerMethodField()
+
+        def get_about(self, obj):
+            return f""" {obj.title}, is a project by {obj.creator}, with {(obj.members).count()} members currently.
+            Here's a brief description on what to expect and how to contribute {obj.description}
+            Rules: {obj.rules}
+            """
 
         def get_detail(self, obj):
             return (f"{obj.title} project by {obj.creator}")
+        
+        def get_project_duration(self, obj):
+            duration = obj.end_project - obj.start_project
+            return duration
     
         class Meta:
             model = Project
-            fields = ('about','moderators', 'detail', 'communities', 'posts')
+            fields = ('title','creator','created_at', 'project_duration', 'about', 'detail', 'project_communities')
 
-    
+
     class ProjectList(serializers.ModelSerializer):
         class Meta:
             model = Project
-            exclude = ['about', 'members', 'rules']
+            fields = ['description', 'members', 'rules']
 
         
     class ProjectUpdateSerializer(serializers.ModelSerializer):
-        extend_project = serializers.DateTimeField()
-
-        def extend_timer(self):
-            if Project.start_timer and User == Project.creator:
-                Project.end_project== Project.extend_project
-                return Response(self.serializer_class("Project duration has been extended"), status=204)
-            raise serializers.ValidationError("Only the project creator can extend the project duration.")
         
         class Meta:
             model = Project
