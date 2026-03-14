@@ -19,18 +19,21 @@ class ProjectManager:
             project: "Project" = self.model(title=title, creator=creator, description=description, start_project=start_project, end_project=end_project, rules=rules)
 
             project.save(using=self._db)
-            project.moderators.set(project.creator)
+            #project.moderators.set(project.creator)
             return project
 
 
-        def update_project(self: models.QuerySet["Project"], project: "Project", title: str | None=None, about: str | None=None, rules: str | None=None) -> "Project":
+        def update_project(self: models.QuerySet["Project"], project: "Project", extend_project: timezone.datetime | None=None, title: str | None=None, description: str | None=None, rules: str | None=None) -> "Project":
             """updates a project title, rules, or about fields with new information."""
 
             if title is not None:
                 project.title = title
             
-            if about is not None:
-                project.about = about
+            if extend_project is not None:
+                project.end_project = extend_project
+            
+            if description is not None:
+                project.about = description
 
             if rules is not None:
                 project.rules = rules
