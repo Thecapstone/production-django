@@ -65,7 +65,14 @@ class ProjectSerializer:
 
         
     class ProjectUpdateSerializer(serializers.ModelSerializer):
-        
+        extend_project = serializers.DateTimeField()
+
+        def get_extend_project(self):
+            if Project.start_timer and User == Project.creator:
+                Project.end_project== Project.extend_project
+                return Response(self.serializer_class("Project duration has been extended"), status=204)
+            raise serializers.ValidationError("Only the project creator can extend the project duration.")
+       
         class Meta:
             model = Project
             fields = ('title', "about","extend_project", "rules")

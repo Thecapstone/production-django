@@ -12,14 +12,13 @@ from drf_spectacular.types import OpenApiTypes
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
-    #serializer_class = ProjectSerializer.CreateProject,
+    serializer_class = ProjectSerializer.CreateProject,
     permission_classes = [AllowAny]
 
     @extend_schema(
         request=ProjectSerializer.CreateProject,
         responses={201: ProjectSerializer.ProjectList},
     )    
-
     def create(self, request):
         serializer = ProjectSerializer.CreateProject(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -43,7 +42,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
             ),
         ],
     )
-
     def detail(self):
         serializer = ProjectSerializer.ProjectDetail
         serializer.is_valid()
