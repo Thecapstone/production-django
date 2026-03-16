@@ -19,7 +19,7 @@ class ProjectManager:
             project: "Project" = self.model(title=title, creator=creator, description=description, start_project=start_project, end_project=end_project, rules=rules)
 
             project.save(using=self._db)
-            #project.moderators.set(project.creator)
+            project.moderators.set(project.creator)
             return project
 
 

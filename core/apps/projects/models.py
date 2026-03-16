@@ -17,7 +17,7 @@ class Project(UIDTimeBasedModel):
     title = models.CharField(max_length=255)
     creator = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="creator")
     description = models.TextField(_("Description of the Project"), blank=True)
-    #moderators: models.QuerySet["Moderator"] = models.ManyToManyField("users.Moderator", choices=ModeratorRolesEnums.choices, related_name="project_managers", blank=True)
+    moderators: models.QuerySet["Moderator"] = models.ManyToManyField("users.Moderator", choices=ModeratorRolesEnums.choices, related_name="project_managers", blank=True)
     members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
     rules = models.TextField(_("Project Rules"), blank=True)
     start_project = models.DateTimeField(default=timezone.now)
@@ -34,19 +34,19 @@ class Project(UIDTimeBasedModel):
         Rules: {self.rules}
         """
 
-    #def save(self, *args, **kwargs):
-        #"""Override save method to ensure that the creator is always a moderator of the project."""
-        #super().save(*args, **kwargs)
-        #self.moderators.set(self.creator)
-        #return self
+    def save(self, *args, **kwargs):
+        """Override save method to ensure that the creator is always a moderator of the project."""
+        super().save(*args, **kwargs)
+        self.moderators.set(self.creator)
+        return self
 
-    #def add_moderators(self, moderators: list["Moderator"]) -> None:
-        #"""Add moderators to the project."""
-        #self.moderators.add(*moderators)
+    def add_moderators(self, moderators: list["Moderator"]) -> None:
+        """Add moderators to the project."""
+        self.moderators.add(*moderators)
 
-    #def remove_moderators(self, moderators: list["Moderator"]) -> None:
-        #"""Remove moderators from the project."""
-        #self.moderators.remove(*moderators)
+    def remove_moderators(self, moderators: list["Moderator"]) -> None:
+        """Remove moderators from the project."""
+        self.moderators.remove(*moderators)
 
     
     def __str__(self):
