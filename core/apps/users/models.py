@@ -61,6 +61,8 @@ class ModeratorPermission(UIDTimeBasedModel):
 class Moderator(UIDTimeBasedModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="moderator_user")
     permissions = models.ManyToManyField("users.ModeratorPermission", related_name="moderator_permissions")
+    project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, related_name="moderator_project", null=True)
+    community = models.ForeignKey('users.Community', on_delete=models.CASCADE, related_name="moderator_community", null=True)
 
 class Community(UIDTimeBasedModel):
     objects: ClassVar["CommunityManager.Manager"] = CommunityManager.Manager()

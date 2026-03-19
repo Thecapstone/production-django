@@ -17,14 +17,14 @@ class Project(UIDTimeBasedModel):
     title = models.CharField(max_length=255)
     creator = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="creator")
     description = models.TextField(_("Description of the Project"), blank=True)
-    moderators: models.QuerySet["Moderator"] = models.ManyToManyField("users.Moderator", choices=ModeratorRolesEnums.choices, related_name="project_managers", blank=True)
+    moderators: models.QuerySet["Moderator"] = models.ForeignKey("users.Moderator", on_delete=models.RESTRICT, related_name="project_moderators")
     members = models.ManyToManyField("users.User", related_name="project_members", blank=True)
     rules = models.TextField(_("Project Rules"), blank=True)
     start_project = models.DateTimeField(default=timezone.now)
     end_project = models.DateTimeField()
-    extend_project = models.DateTimeField()
+    #extend_project = models.DateTimeField()
     objects: ClassVar[ProjectManager.Manager] = ProjectManager.Manager()
-    
+      
     
 
     @property
